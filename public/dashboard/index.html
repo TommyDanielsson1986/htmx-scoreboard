@@ -9,7 +9,26 @@
     <title>Overlay settings</title>
 </head>
 <body>
-    <h1>Hello dashboard</h1>
-
+    <h1>Dashboard Settings</h1>
+    <div class="overlay-settings">
+        <div hx-ext="ws" ws-connect="/player-name-p1">
+            <h2>Player 1</h2>
+            <form id="form" ws-send>
+                <input name="player-name-p1">
+            </form>
+        </div>
+        <div hx-ext="ws" ws-connect="/round">
+            <h2>Rounds 1</h2>
+            <form id="form" ws-send>
+                <input name="round">
+            </form>
+        </div>
+        <div hx-ext="ws" ws-connect="/player-name-p2">
+            <h2>Player 2</h2>
+            <form id="form" ws-send>
+                <input name="player-name-p2">
+            </form>
+        </div>
+    </div>
 </body>
 </html>

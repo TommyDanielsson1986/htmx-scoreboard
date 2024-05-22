@@ -13,63 +13,13 @@ app.use(express.urlencoded({ extended: true }));
 // Parse JSON bodies (as sent by API client)
 app.use(express.json());
 
-app.ws('/frontend', function connection(ws, res) {
-    connections.push(ws);
-    ws.on('message', function incoming(message) {
-        const parsedNamedP1 = JSON.parse(message.toString())["name_message_p1"];
-        connections.forEach((connection) => {
-            connection.send(`<div id="p1_name">${parsedNamedP1}</div>`)
-        })
-    });
-})
 
-app.ws('/frontend', function connection(ws, res) {
+app.ws('/player-name-p1', function connection(ws, res) {
     connections.push(ws);
     ws.on('message', function incoming(message) {
-        const parsedNamedP1 = JSON.parse(message.toString())["name_message_p2"];
-        connections.forEach((connection) => {
-            connection.send(`<div id="p2_name">${parsedNamedP1}</div>`)
-        })
-    });
-})
-app.ws('/swap', function connection(ws, res) {
-    connections.push(ws);
-    ws.on('message', function incoming(message) {
-        const parseSwap = JSON.parse(message.toString())["swap"];
-        connections.forEach((connection) => {
-            connection.send(parseSwap)
-        })
-    });
-})
-
-/* 
-app.ws('/player1name', function connection(ws, res) {
-    connections.push(ws);
-    ws.on('message', function incoming(message) {
-        const parsedName = JSON.parse(message.toString())["name_message_p1"];
+        const parsedName = JSON.parse(message.toString())["player-name-p1"];
         connections.forEach((connection) => {
             connection.send(`<div id="p1_name">${parsedName}</div>`)
-        })
-    });
-})
-
-
-app.ws('/player2name', function connection(ws, res) {
-    connections.push(ws);
-    ws.on('message', function incoming(message) {
-        const parsedName = JSON.parse(message.toString())["name_message_p2"];
-        connections.forEach((connection) => {
-            connection.send(`<div id="p2_name">${parsedName}</div>`)
-        })
-    });
-})
-
-app.ws('/player2score', function connection(ws, res) {
-    connections.push(ws);
-    ws.on('message', function incoming(message) {
-        const parsedScore = JSON.parse(message.toString())["score_message_p2"];
-        connections.forEach((connection) => {
-            connection.send(`<div id="p2_score">${parsedScore}</div>`)
         })
     });
 })
@@ -82,8 +32,17 @@ app.ws('/round', function connection(ws, res) {
             connection.send(`<div id="round">${parsedRound}</div>`)
         })
     });
-}) */
+}) 
 
+app.ws('/player-name-p2', function connection(ws, res) {
+    connections.push(ws);
+    ws.on('message', function incoming(message) {
+        const parsedName = JSON.parse(message.toString())["player-name-p2"];
+        connections.forEach((connection) => {
+            connection.send(`<div id="p2_name">${parsedName}</div>`)
+        })
+    });
+})
 
 // Start the server
 app.listen(5000, () => {
