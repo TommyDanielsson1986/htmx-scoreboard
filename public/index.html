@@ -1,29 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"
+        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
     <link rel="stylesheet" href="./css/overlay.css">
     <title>FGC overlay</title>
 </head>
+
 <body>
     <main class="overlay">
-        <div class="overlay-container">
+        <div class="overlay-container" hx-ext="ws" ws-connect="ws://localhost:5000/frontend">
             <div class="player-left-container">
-                <div class="player-left-country"><img class="country player-one" src="./img/flags/se.svg" alt="sweden"></div>
-                <div class="player-left-name">TheAsianViking86</div>
-                <div class="player-left-score">2</div>
+                <div class="player-left-country">
+                    <img class="country player-one" src="./img/flags/se.svg" alt="sweden">
+                </div>
+                <div class="player-left-name">
+                    <div id="p1_name">Player 1</div>
+                </div>
+                <div class="player-left-score">
+                    <div id="p1_score">0</div>
+                </div>
             </div>
             <div class="rounds-container">
-                <div class="round">FT 2</div>
+                <div id="round" class="round">FT 2</div>
             </div>
             <div class="player-right-container">
-                <div class="player-right-score">1</div>
-                <div class="player-right-name">Teknolyzer</div>
-                <div class="player-right-country"><img class="country player-two" src="./img/flags/th.svg" alt="thailand"></div>
+                <div class="player-right-score">
+                    <div id="p2_score">0</div>
+                </div>
+                <div class="player-right-name">
+                    <div id="p2_name">Player 2</div>
+                </div>
+                <div class="player-right-country">
+                    <img class="country player-two" src="./img/flags/th.svg" alt="thailand">
+                </div>
             </div>
         </div>
     </main>
 </body>
+
 </html>

@@ -10,6 +10,7 @@
     background: url('../img/default.png') no-repeat;
     height: 1080px;
     width: 1920px;
+    margin: 0 auto;
 }
 
 .overlay .country {
