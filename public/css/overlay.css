@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+
+*, *:after, *:before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.overlay {
+    background: url('../img/default.png') no-repeat;
+    height: 1080px;
+    width: 1920px;
+}
+
+.overlay .country {
+    width: 2.6rem;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.overlay-container {
+    position: relative;
+    width: 80%;
+    left: 50%;
+    transform: translate(-50%, -3%);
+    display: flex;
+    top: 3%;
+}
+
+.overlay-container > * {
+    font-size: 2rem;
+    color: #fff;
+    font-family: "Roboto Flex", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings:
+      "slnt" 0,
+      "wdth" 100,
+      "GRAD" 0,
+      "XOPQ" 96,
+      "XTRA" 468,
+      "YOPQ" 79,
+      "YTAS" 750,
+      "YTDE" -203,
+      "YTFI" 738,
+      "YTLC" 514,
+      "YTUC" 712;
+}
+
+.player-left-container,
+.player-right-container,
+.rounds-container {    
+    display: flex;
+    align-items: center;
+}
+
+.player-left-container,
+.player-right-container {
+    width: 38%;
+}
+
+.player-left-container .player-left-name,
+.player-right-container .player-right-name {
+    width: 85%;
+    text-align: center;
+    position: relative;
+    bottom: 10%;
+}
+
+.player-left-score,
+.player-right-score {
+    position: relative;
+    bottom: 7%;
+    color: #000;
+}
+
+.player-left-container .player-left-score {
+    left: 1.5%;
+    transform: skewX(35deg);
+}
+
+.player-right-container .player-right-score {
+    right: 1.5%;
+    transform: skewX(-35deg);
+    margin-left: 1.5rem;
+    margin-right: 2.5rem;
+
+}
+ 
+.rounds-container {
+    width: 24%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.5rem;
+}
