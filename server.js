@@ -1,7 +1,11 @@
 import express from 'express';
 import expressWebsocket from 'express-ws';
+import fs from 'node:fs';
 const app = express();
 expressWebsocket(app);
+
+const rawdata = fs.readFileSync('./flags.json', 'utf8');
+let flagsResult = JSON.parse(rawdata);
 
 // Set static folder
 app.use(express.static('public'));
@@ -14,36 +18,142 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-app.ws('/player-name-p1', function connection(ws, res) {
+app.get('/api/v1/flags', (req, res) => {
+    res.send(flagsResult);
+})
+
+
+app.ws('/players-info', function connection(ws, res) {
     connections.push(ws);
     ws.on('message', function incoming(message) {
-        const parsedName = JSON.parse(message.toString())["player-name-p1"];
-        connections.forEach((connection) => {
-            connection.send(`<div id="p1_name">${parsedName}</div>`)
-        })
+        /*console.log(message)  */
+        const parsedNameP1 = JSON.parse(message.toString())["player-one-name"];
+        const parsedScoreP1 = JSON.parse(message.toString())["player-one-score"];
+        const parsedNameP2 = JSON.parse(message.toString())["player-two-name"];
+        const parsedScoreP2 = JSON.parse(message.toString())["player-two-score"];
+        const parseFlagP1 = JSON.parse(message.toString())["player-one-flag"];
+        const parseFlagP2 = JSON.parse(message.toString())["player-two-flag"];
+        const parseSwap = JSON.parse(message.toString())["swap"];
+
+        if (parseSwap === "0") {
+            if (parsedNameP1) {
+                connections.forEach((connection) => {
+                    connection.send(`<div id="p1_name">${parsedNameP1}</div>`)
+                })
+            }
+
+            if (parsedScoreP1) {
+                connections.forEach((connection) => {
+                    connection.send(`<div id="p1_score">${parsedScoreP1}</div>`)
+                })
+            }
+
+            if (parsedNameP2) {
+                connections.forEach((connection) => {
+                    connection.send(`<div id="p2_name">${parsedNameP2}</div>`)
+                })
+            }
+
+            if (parsedScoreP2) {
+                connections.forEach((connection) => {
+                    connection.send(`<div id="p2_score">${parsedScoreP2}</div>`)
+                })
+            }
+
+            if (parseFlagP1) {
+                if (parseFlagP1 === 'hide') {
+                    connections.forEach((connection) => {
+                        connection.send(`<img id="flag_p1" class="country hidden" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
+                    })
+                }
+                else {
+                    connections.forEach((connection) => {
+                        connection.send(`<img id="flag_p1" class="country" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
+                    })
+                }
+            }
+
+
+            if (parseFlagP2) {
+                if (parseFlagP2 === 'hide') {
+                    connections.forEach((connection) => {
+                        connection.send(`<img id="flag_p2" class="country hidden" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
+                    })
+                }
+                else {
+                    connections.forEach((connection) => {
+                        connection.send(`<img id="flag_p2" class="country" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
+                    })
+                }
+            }
+        }
+
+        else {
+            if (parsedNameP2) {
+                connections.forEach((connection) => {
+                    connection.send(`<div id="p1_name">${parsedNameP2}</div>`)
+                })
+            }
+
+            if (parsedScoreP2) {
+                connections.forEach((connection) => {
+                    connection.send(`<div id="p1_score">${parsedScoreP2}</div>`)
+                })
+            }
+
+            if (parsedNameP1) {
+                connections.forEach((connection) => {
+                    connection.send(`<div id="p2_name">${parsedNameP1}</div>`)
+                })
+            }
+
+            if (parsedScoreP1) {
+                connections.forEach((connection) => {
+                    connection.send(`<div id="p2_score">${parsedScoreP1}</div>`)
+                })
+            }
+
+            if (parseFlagP1) {
+                if (parseFlagP1 === 'hide') {
+                    connections.forEach((connection) => {
+                        connection.send(`<img id="flag_p2" class="country hidden" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
+                    })
+                }
+                else {
+                    connections.forEach((connection) => {
+                        connection.send(`<img id="flag_p2" class="country" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
+                    })
+                }
+            }
+
+
+            if (parseFlagP2) {
+                if (parseFlagP2 === 'hide') {
+                    connections.forEach((connection) => {
+                        connection.send(`<img id="flag_p1" class="country hidden" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
+                    })
+                }
+                else {
+                    connections.forEach((connection) => {
+                        connection.send(`<img id="flag_p1" class="country" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
+                    })
+                }
+            }
+        }
     });
 })
 
-app.ws('/round', function connection(ws, res) {
+app.ws('/tournament-rounds', function connection(ws, res) {
     connections.push(ws);
     ws.on('message', function incoming(message) {
         const parsedRound = JSON.parse(message.toString())["round"];
-        connections.forEach((connection) => {
-            connection.send(`<div id="round">${parsedRound}</div>`)
-        })
-    });
-}) 
-
-app.ws('/player-name-p2', function connection(ws, res) {
-    connections.push(ws);
-    ws.on('message', function incoming(message) {
-        const parsedName = JSON.parse(message.toString())["player-name-p2"];
-        connections.forEach((connection) => {
-            connection.send(`<div id="p2_name">${parsedName}</div>`)
-        })
-    });
+        if(parsedRound) {
+            connections.forEach((connection) => {
+                connection.send(`<div id="round" class="round">${parsedRound}</div>`)
+            })
+        }
+    })
 })
-
 
 // Start the server
 app.listen(5000, () => {

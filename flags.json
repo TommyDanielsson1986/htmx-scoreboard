@@ -1,6 +1,60 @@
 {
-    "flags" : {
-        "Sweden" : "se",
-        "Norway" : "no"
+  "flags": [
+    {
+      "name": "Hide",
+      "code": "hide"
+    },
+    {
+      "name": "Pirate",
+      "code": "pirate"
+    },
+    {
+      "name": "Australia",
+      "code": "au"
+    },
+    {
+      "name": "Sweden",
+      "code": "se"
+    },
+    {
+      "name": "Denmark",
+      "code": "dk"
+    },
+    {
+      "name": "Norway",
+      "code": "no"
+    },
+    {
+      "name": "Finland",
+      "code": "fi"
+    },
+    {
+      "name": "USA",
+      "code": "us"
+    },
+    {
+      "name": "Canada",
+      "code": "ca"
+    },
+    {
+      "name": "Spain",
+      "code": "es"
+    },
+    {
+      "name": "England",
+      "code": "uk"
+    },
+    {
+      "name": "Costa Rica",
+      "code": "cr"
+    },
+    {
+      "name": "Germany",
+      "code": "de"
+    },
+    {
+      "name": "Hong-kong",
+      "code": "hk"
     }
+  ]
 }

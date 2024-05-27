@@ -1,34 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"
+        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+        crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
     <link rel="stylesheet" href="../css/dashboard-settings.css">
     <title>Overlay settings</title>
 </head>
+
 <body>
     <h1>Dashboard Settings</h1>
     <div class="overlay-settings">
-        <div hx-ext="ws" ws-connect="/player-name-p1">
-            <h2>Player 1</h2>
-            <form id="form" ws-send>
-                <input name="player-name-p1">
-            </form>
-        </div>
-        <div hx-ext="ws" ws-connect="/round">
-            <h2>Rounds 1</h2>
-            <form id="form" ws-send>
-                <input name="round">
-            </form>
-        </div>
-        <div hx-ext="ws" ws-connect="/player-name-p2">
-            <h2>Player 2</h2>
-            <form id="form" ws-send>
-                <input name="player-name-p2">
+        <div hx-ext="ws" ws-connect="/players-info">
+            <form>
+                <div class="player-1">
+                    <h2>Player 1 info</h2>
+                    <label for="flags">
+                        <span>Flag</span>
+                        <select class="flag" name="player-one-flag">
+                            <option value="hide" default="true">Hide</option>
+                            <option value="au">Australia</option>
+                            <option value="se">Sweden</option>
+                        </select>
+                    </label>
+                    <label for="player-one-name">
+                        <span>Name</span>
+                        <input type="text" name="player-one-name">
+                    </label>
+                    <label for="player-one-score">
+                        <span>Score</span>
+                        <input type="text" name="player-one-score">
+                    </label>
+                </div>
+                <div class="player-2">
+                    <h2>Player 2 info</h2>
+                    <label for="flags">
+                        <span>Flag</span>
+                        <select class="flag" name="player-two-flag">
+                            <option value="hide" default="true">Hide</option>
+                            <option value="au">Australia</option>
+                            <option value="se">Sweden</option>
+                        </select>
+                    </label>
+                    <label for="player-two-name">
+                        <span>Name</span>
+                        <input type="text" name="player-two-name">
+                    </label>
+                    <label for="player-two-score">
+                        <span>Score</span>
+                        <input type="text" name="player-two-score">
+                    </label>
+                </div>
+                <div class="buttons">
+                    <button type="button" ws-send>Update Info</button>
+                    <button id="swapButton" name="swap" type="button" onclick="swapValue()" value="0" ws-send>Swap</button>
+                </div>
             </form>
         </div>
     </div>
+    <div class="rounds" hx-ext="ws" ws-connect="/tournament-rounds">
+        <form>
+            <h2>Rounds</h2>
+            <label for="rounds">
+                <span>Round</span>
+                <input type="text" name="round">
+            </label>
+            <button type="button" ws-send>Update Round</button>
+        </form>
+    </div>
+
+    <script>
+        let swapValue = () => {
+            let button = document.querySelector("#swapButton");
+            if (button.value === "0") {
+                return button.value = "1";
+                 
+            }
+            else {
+                return button.value = "0";
+            }
+        }
+    </script>
 </body>
+
 </html>
