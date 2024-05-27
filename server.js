@@ -26,7 +26,7 @@ app.get('/api/v1/flags', (req, res) => {
 app.ws('/players-info', function connection(ws, res) {
     connections.push(ws);
     ws.on('message', function incoming(message) {
-        /*console.log(message)  */
+        console.log(message)
         const parsedNameP1 = JSON.parse(message.toString())["player-one-name"];
         const parsedScoreP1 = JSON.parse(message.toString())["player-one-score"];
         const parsedNameP2 = JSON.parse(message.toString())["player-two-name"];
@@ -34,8 +34,8 @@ app.ws('/players-info', function connection(ws, res) {
         const parseFlagP1 = JSON.parse(message.toString())["player-one-flag"];
         const parseFlagP2 = JSON.parse(message.toString())["player-two-flag"];
         const parseSwap = JSON.parse(message.toString())["swap"];
-
-        if (parseSwap === "0") {
+        console.log(parseSwap)
+        if (parseSwap === "0" || parseSwap === undefined) {
             if (parsedNameP1) {
                 connections.forEach((connection) => {
                     connection.send(`<div id="p1_name">${parsedNameP1}</div>`)
@@ -61,30 +61,17 @@ app.ws('/players-info', function connection(ws, res) {
             }
 
             if (parseFlagP1) {
-                if (parseFlagP1 === 'hide') {
-                    connections.forEach((connection) => {
-                        connection.send(`<img id="flag_p1" class="country hidden" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
-                    })
-                }
-                else {
-                    connections.forEach((connection) => {
-                        connection.send(`<img id="flag_p1" class="country" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
-                    })
-                }
+                connections.forEach((connection) => {
+                    connection.send(`<img id="flag_p1" class="country" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
+                })
             }
 
-
             if (parseFlagP2) {
-                if (parseFlagP2 === 'hide') {
-                    connections.forEach((connection) => {
-                        connection.send(`<img id="flag_p2" class="country hidden" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
-                    })
-                }
-                else {
-                    connections.forEach((connection) => {
-                        connection.send(`<img id="flag_p2" class="country" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
-                    })
-                }
+
+                connections.forEach((connection) => {
+                    connection.send(`<img id="flag_p2" class="country" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
+                })
+
             }
         }
 
@@ -114,30 +101,18 @@ app.ws('/players-info', function connection(ws, res) {
             }
 
             if (parseFlagP1) {
-                if (parseFlagP1 === 'hide') {
-                    connections.forEach((connection) => {
-                        connection.send(`<img id="flag_p2" class="country hidden" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
-                    })
-                }
-                else {
-                    connections.forEach((connection) => {
-                        connection.send(`<img id="flag_p2" class="country" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
-                    })
-                }
+
+                connections.forEach((connection) => {
+                    connection.send(`<img id="flag_p2" class="country" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
+                })
+
             }
 
-
             if (parseFlagP2) {
-                if (parseFlagP2 === 'hide') {
-                    connections.forEach((connection) => {
-                        connection.send(`<img id="flag_p1" class="country hidden" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
-                    })
-                }
-                else {
-                    connections.forEach((connection) => {
-                        connection.send(`<img id="flag_p1" class="country" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
-                    })
-                }
+                connections.forEach((connection) => {
+                    connection.send(`<img id="flag_p1" class="country" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
+                })
+
             }
         }
     });
@@ -147,7 +122,7 @@ app.ws('/tournament-rounds', function connection(ws, res) {
     connections.push(ws);
     ws.on('message', function incoming(message) {
         const parsedRound = JSON.parse(message.toString())["round"];
-        if(parsedRound) {
+        if (parsedRound) {
             connections.forEach((connection) => {
                 connection.send(`<div id="round" class="round">${parsedRound}</div>`)
             })

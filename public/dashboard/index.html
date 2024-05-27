@@ -33,7 +33,11 @@
                     </label>
                     <label for="player-one-score">
                         <span>Score</span>
-                        <input type="text" name="player-one-score">
+                        <div class="buttons">
+                            <button type="button" class="add-button" onclick="addP1Score()">+</button>
+                            <input type="text" value="0" id="player-one-score" name="player-one-score">
+                            <button type="button" class="remove-button" onclick="removeP1Score()">-</button>
+                        </div>
                     </label>
                 </div>
                 <div class="player-2">
@@ -52,12 +56,17 @@
                     </label>
                     <label for="player-two-score">
                         <span>Score</span>
-                        <input type="text" name="player-two-score">
+                        <div class="buttons">
+                            <button type="button" class="add-button" onclick="addP2Score()">+</button>
+                            <input type="text" value="0" id="player-two-score" name="player-two-score">
+                            <button type="button" class="remove-button" onclick="removeP2Score()">-</button>
+                        </div>
                     </label>
                 </div>
                 <div class="buttons">
                     <button type="button" ws-send>Update Info</button>
-                    <button id="swapButton" name="swap" type="button" onclick="swapValue()" value="0" ws-send>Swap</button>
+                    <button id="swapButton" name="swap" type="button" onclick="swapValue()" value="0"
+                        ws-send>Swap</button>
                 </div>
             </form>
         </div>
@@ -74,11 +83,25 @@
     </div>
 
     <script>
+
+        let addP1Score = () => {
+            let score = document.querySelector("#player-one-score");
+            let newValue = Number(score.value++);
+            return newValue;
+        }
+
+
+        let removeP1Score = () => {
+            let score = document.querySelector("#player-one-score");
+            let newValue = Number(score.value--);
+            return newValue;
+        }
+
+
         let swapValue = () => {
             let button = document.querySelector("#swapButton");
             if (button.value === "0") {
                 return button.value = "1";
-                 
             }
             else {
                 return button.value = "0";
