@@ -1,14 +1,6 @@
 {
   "flags": [
     {
-      "name": "Hide",
-      "code": "hide"
-    },
-    {
-      "name": "Pirate",
-      "code": "pirate"
-    },
-    {
       "name": "Australia",
       "code": "au"
     },

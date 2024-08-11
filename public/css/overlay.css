@@ -1,16 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
 
-*, *:after, *:before {
+*,
+*:after,
+*:before {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+body {
+    overflow: hidden;
 }
 
 .overlay {
     background: url('../img/default.png') no-repeat;
     height: 1080px;
     width: 1920px;
-    margin: -1.375rem auto 0
+    margin: 0 auto;
 }
 
 .overlay .country {
@@ -29,7 +35,10 @@
     top: 3%;
 }
 
-.overlay-container > * {
+
+.player-left-container,
+.player-right-container,
+.rounds-container {
     font-size: 2rem;
     color: #fff;
     font-family: "Roboto Flex", sans-serif;
@@ -37,22 +46,17 @@
     font-weight: 500;
     font-style: normal;
     font-variation-settings:
-      "slnt" 0,
-      "wdth" 100,
-      "GRAD" 0,
-      "XOPQ" 96,
-      "XTRA" 468,
-      "YOPQ" 79,
-      "YTAS" 750,
-      "YTDE" -203,
-      "YTFI" 738,
-      "YTLC" 514,
-      "YTUC" 712;
-}
-
-.player-left-container,
-.player-right-container,
-.rounds-container {    
+        "slnt" 0,
+        "wdth" 100,
+        "GRAD" 0,
+        "XOPQ" 96,
+        "XTRA" 468,
+        "YOPQ" 79,
+        "YTAS" 750,
+        "YTDE" -203,
+        "YTFI" 738,
+        "YTLC" 514,
+        "YTUC" 712;
     display: flex;
     align-items: center;
 }
@@ -87,7 +91,6 @@
     transform: skewX(-35deg);
     margin-left: 1.5rem;
     margin-right: 2.5rem;
-
 }
 
 .rounds-container {
@@ -96,4 +99,168 @@
     align-items: center;
     justify-content: center;
     padding-bottom: 0.625rem;
+}
+
+
+/* Tekken 8 overlay */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+.overlay.tekken {
+    background: url('../img/t8-overlay.png') no-repeat;
+}
+
+.overlay.tekken .overlay-container {
+    width: 91.5%;
+    transform: translate(-50%, -2%);
+    top: 2%;
+    height: 2.5rem;
+    padding-left: 4%;
+}
+
+.overlay.tekken .player-left-container {
+    width: 39.5%;
+}
+
+.overlay.tekken .player-right-container {
+    width: 37.5%;
+}
+
+.overlay.tekken .player-left-container .player-left-name,
+.overlay.tekken .player-right-container .player-right-name {
+    bottom: 0%;
+}
+
+.overlay.tekken .player-left-container .player-left-country,
+.overlay.tekken .player-right-container .player-right-country {
+    margin-top: 0.3125rem;
+}
+
+
+.overlay.tekken .rounds-container {
+    text-transform: uppercase;
+}
+
+.overlay.tekken .player-left-container,
+.overlay.tekken .player-right-container,
+.overlay.tekken .rounds-container {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    text-shadow: #000 3px 0 3px;
+}
+
+.overlay.tekken .player-left-country {
+    margin-left: 0.7rem;
+}
+
+.overlay.tekken .player-right-container .player-right-country {
+    position: relative;
+    right: -2rem;
+}
+
+.overlay.tekken .player-right-country {
+    margin-right: 0.45rem;
+}
+
+.overlay.tekken .player-left-container .player-left-score,
+.overlay.tekken .player-right-container .player-right-score {
+    color: #fff;
+    transform: skewX(0);
+    top: 0;
+}
+
+
+.overlay.tekken .player-left-container .player-left-score {
+    width: 33%;
+}
+
+.overlay.tekken .player-right-container .player-right-score {
+    width: 16%;
+    margin-left: 6.5rem;
+    right: -7.5%;
+}
+
+
+.overlay.tekken .rounds-container {
+    width: 16%;
+    margin: 0 0 1.625rem;
+}
+
+
+/* Street fighter 6 overlay */
+
+@font-face {
+    font-family: 'citybrawlersboldcaps';
+    src: url('./fonts/citybrawlersboldcaps-webfont.woff2') format('woff2'),
+         url('./fonts/citybrawlersboldcaps-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+.overlay.streetfighter6 {
+    background: url('../img/sf6-overlay.png') no-repeat;
+}
+
+.overlay.overlay.streetfighter6 .overlay-container {
+    width: 74%;
+    transform: translate(-50%, 15%);
+    top: 0;
+}
+
+.overlay.streetfighter6 .player-left-container,
+.overlay.streetfighter6 .player-right-container,
+.overlay.streetfighter6 .rounds-container {
+    font-family: 'citybrawlersboldcaps';
+    text-shadow: #000 3px 0 3px;
+    font-size: 3rem;
+}
+
+.overlay.streetfighter6 .player-right-container {
+    padding-left: 3rem;
+}
+
+.overlay.streetfighter6 .player-left-container {
+    width: 34%;
+}
+
+.overlay.streetfighter6 .player-left-country {
+    margin-left: 0.3rem;
+}
+
+.overlay.streetfighter6 .player-left-country #flag_p1 {
+    transform: skewX(-29deg);
+}
+
+.overlay.streetfighter6 .player-right-country #flag_p2 {
+    transform: skewX(29deg);
+    padding-right:0.2rem;
+}
+
+.overlay.streetfighter6 .player-left-container .player-left-score,
+.overlay.streetfighter6 .player-right-container .player-right-score {
+    color: #fff;
+    top: -10%;
+}
+
+.overlay.streetfighter6 .player-left-container .player-left-score {
+    left: 0;
+    transform: skewX(-26deg);
+}
+
+.overlay.streetfighter6 .player-right-container .player-right-score {
+    right: 0;
+    transform: skewX(26deg);
+}
+
+.overlay.streetfighter6 .rounds-container {
+    width: 28%;
+    margin-bottom: 0rem;
+    padding-left: 4rem;
+    position: relative;
+    top: -0.7rem;
+}
+
+.overlay.streetfighter6 .player-left-container .player-left-name, 
+.overlay.streetfighter6 .player-right-container .player-right-name {
+    bottom: 10%;
 }

@@ -22,14 +22,12 @@
                     <label for="flags">
                         <span>Flag</span>
                         <select class="flag" name="player-one-flag">
-                            <option value="hide" default="true">Hide</option>
-                            <option value="au">Australia</option>
-                            <option value="se">Sweden</option>
+
                         </select>
                     </label>
                     <label for="player-one-name">
                         <span>Name</span>
-                        <input type="text" name="player-one-name">
+                        <input type="text" value="player 1" name="player-one-name">
                     </label>
                     <label for="player-one-score">
                         <span>Score</span>
@@ -45,14 +43,12 @@
                     <label for="flags">
                         <span>Flag</span>
                         <select class="flag" name="player-two-flag">
-                            <option value="hide" default="true">Hide</option>
-                            <option value="au">Australia</option>
-                            <option value="se">Sweden</option>
+
                         </select>
                     </label>
                     <label for="player-two-name">
                         <span>Name</span>
-                        <input type="text" name="player-two-name">
+                        <input type="text" value="player 2" name="player-two-name">
                     </label>
                     <label for="player-two-score">
                         <span>Score</span>
@@ -64,9 +60,8 @@
                     </label>
                 </div>
                 <div class="buttons">
-                    <button type="button" ws-send>Update Info</button>
-                    <button id="swapButton" name="swap" type="button" onclick="swapValue()" value="0"
-                        ws-send>Swap</button>
+                    <button type="button" ws-send name="updateInfo" id="updateInfo" value="clicked">Update Info</button>
+                    <button type="button" ws-send name="swap" id="swapButton" onclick="swapValue()" value="0">Swap</button>
                 </div>
             </form>
         </div>
@@ -84,6 +79,36 @@
 
     <script>
 
+        let getFlags = async () => {
+
+            let response = await fetch('/api/v1/flags');
+            let result = await response.json();
+            let selectBox = document.querySelectorAll('.flag');
+            let flagOptions = "<option value='hide' default='true'>Hide</option>";
+            flagOptions += "<option value='pirate' default='true'>Pirate</option>";
+
+            //Order the flag names by A-Ö
+            result['flags'].sort(function (a, b) {
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            for (let i = 0; i < result['flags'].length; i++) {
+                flagOptions += `<option value=${result['flags'][i].code}>${result['flags'][i].name}</option>`
+            }
+
+            selectBox[0].innerHTML = flagOptions;
+            selectBox[1].innerHTML = flagOptions;
+        }
+
+
+        /* selectBox.append(`<option value=${result['flags'][i].code}>${result['flags'][i].name}</option>`);  */
+
         let addP1Score = () => {
             let score = document.querySelector("#player-one-score");
             let newValue = Number(score.value++);
@@ -97,6 +122,18 @@
             return newValue;
         }
 
+        let addP2Score = () => {
+            let score = document.querySelector("#player-two-score");
+            let newValue = Number(score.value++);
+            return newValue;
+        }
+
+
+        let removeP2Score = () => {
+            let score = document.querySelector("#player-two-score");
+            let newValue = Number(score.value--);
+            return newValue;
+        }
 
         let swapValue = () => {
             let button = document.querySelector("#swapButton");
@@ -107,6 +144,11 @@
                 return button.value = "0";
             }
         }
+        window.addEventListener('load', function () {
+            getFlags()
+        });
+
+
     </script>
 </body>
 

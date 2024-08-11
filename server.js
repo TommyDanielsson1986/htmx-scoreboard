@@ -4,8 +4,10 @@ import fs from 'node:fs';
 const app = express();
 expressWebsocket(app);
 
-const rawdata = fs.readFileSync('./flags.json', 'utf8');
-let flagsResult = JSON.parse(rawdata);
+const rawdataFlags = fs.readFileSync('./flags.json', 'utf8');
+const readP1Name = fs.readFileSync('./p1name.txt', 'utf8');
+const readP2Name = fs.readFileSync('./p2name.txt', 'utf8');
+let flagsResult = JSON.parse(rawdataFlags);
 
 // Set static folder
 app.use(express.static('public'));
@@ -22,11 +24,10 @@ app.get('/api/v1/flags', (req, res) => {
     res.send(flagsResult);
 })
 
-
 app.ws('/players-info', function connection(ws, res) {
     connections.push(ws);
     ws.on('message', function incoming(message) {
-        console.log(message)
+
         const parsedNameP1 = JSON.parse(message.toString())["player-one-name"];
         const parsedScoreP1 = JSON.parse(message.toString())["player-one-score"];
         const parsedNameP2 = JSON.parse(message.toString())["player-two-name"];
@@ -34,11 +35,12 @@ app.ws('/players-info', function connection(ws, res) {
         const parseFlagP1 = JSON.parse(message.toString())["player-one-flag"];
         const parseFlagP2 = JSON.parse(message.toString())["player-two-flag"];
         const parseSwap = JSON.parse(message.toString())["swap"];
-        console.log(parseSwap)
-        if (parseSwap === "0" || parseSwap === undefined) {
-            if (parsedNameP1) {
+        const parseClicked = JSON.parse(message.toString())["updateInfo"];
+    
+        if (parseSwap === '0') {
+            if (readP1Name) {
                 connections.forEach((connection) => {
-                    connection.send(`<div id="p1_name">${parsedNameP1}</div>`)
+                    connection.send(`<div id="p1_name">${readP1Name}</div>`)
                 })
             }
 
@@ -48,9 +50,9 @@ app.ws('/players-info', function connection(ws, res) {
                 })
             }
 
-            if (parsedNameP2) {
+            if (readP2Name) {
                 connections.forEach((connection) => {
-                    connection.send(`<div id="p2_name">${parsedNameP2}</div>`)
+                    connection.send(`<div id="p2_name">${readP2Name}</div>`)
                 })
             }
 
@@ -62,20 +64,18 @@ app.ws('/players-info', function connection(ws, res) {
 
             if (parseFlagP1) {
                 connections.forEach((connection) => {
-                    connection.send(`<img id="flag_p1" class="country" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
+                    connection.send(`<img id="flag_p1" class="country" src="../../img/flags/${parseFlagP1}.png" alt="flag">`);
                 })
             }
 
             if (parseFlagP2) {
-
                 connections.forEach((connection) => {
-                    connection.send(`<img id="flag_p2" class="country" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
+                    connection.send(`<img id="flag_p2" class="country" src="../../img/flags/${parseFlagP2}.png" alt="flag">`);
                 })
-
             }
         }
 
-        else {
+        if (parseSwap === '1') {
             if (parsedNameP2) {
                 connections.forEach((connection) => {
                     connection.send(`<div id="p1_name">${parsedNameP2}</div>`)
@@ -100,23 +100,22 @@ app.ws('/players-info', function connection(ws, res) {
                 })
             }
 
-            if (parseFlagP1) {
-
-                connections.forEach((connection) => {
-                    connection.send(`<img id="flag_p2" class="country" src="./img/flags/${parseFlagP1}.png" alt="flag">`);
-                })
-
-            }
-
             if (parseFlagP2) {
                 connections.forEach((connection) => {
-                    connection.send(`<img id="flag_p1" class="country" src="./img/flags/${parseFlagP2}.png" alt="flag">`);
+                    connection.send(`<img id="flag_p1" class="country" src="../../img/flags/${parseFlagP2}.png" alt="flag">`);
                 })
+            }
 
+            if (parseFlagP1) {
+                connections.forEach((connection) => {
+                    connection.send(`<img id="flag_p2" class="country" src="../../img/flags/${parseFlagP1}.png" alt="flag">`);
+                })
             }
         }
+
     });
 })
+
 
 app.ws('/tournament-rounds', function connection(ws, res) {
     connections.push(ws);
