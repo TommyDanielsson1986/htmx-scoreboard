@@ -60,7 +60,7 @@
                     </label>
                 </div>
                 <div class="buttons">
-                    <button type="button" ws-send name="updateInfo" id="updateInfo" value="clicked">Update Info</button>
+                    <button type="button" ws-send name="swap" id="updateInfo" value="0">Update Info</button>
                     <button type="button" ws-send name="swap" id="swapButton" onclick="swapValue()" value="0">Swap</button>
                 </div>
             </form>
@@ -136,10 +136,13 @@
 
         let swapValue = () => {
             let button = document.querySelector("#swapButton");
+            let updateButton = document.querySelector("#updateInfo");
             if (button.value === "0") {
+                updateButton.value = "1";
                 return button.value = "1";
             }
             else {
+                updateButton.value = "0";
                 return button.value = "0";
             }
         }
