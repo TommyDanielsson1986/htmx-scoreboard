@@ -5,8 +5,6 @@ const app = express();
 expressWebsocket(app);
 
 const rawdataFlags = fs.readFileSync('./flags.json', 'utf8');
-const readP1Name = fs.readFileSync('./p1name.txt', 'utf8');
-const readP2Name = fs.readFileSync('./p2name.txt', 'utf8');
 let flagsResult = JSON.parse(rawdataFlags);
 
 // Set static folder
@@ -38,9 +36,9 @@ app.ws('/players-info', function connection(ws, res) {
         const parseClicked = JSON.parse(message.toString())["updateInfo"];
     
         if (parseSwap === '0') {
-            if (readP1Name) {
+            if (parsedNameP1) {
                 connections.forEach((connection) => {
-                    connection.send(`<div id="p1_name">${readP1Name}</div>`)
+                    connection.send(`<div id="p1_name">${parsedNameP1}</div>`)
                 })
             }
 
@@ -50,9 +48,9 @@ app.ws('/players-info', function connection(ws, res) {
                 })
             }
 
-            if (readP2Name) {
+            if (parsedNameP2) {
                 connections.forEach((connection) => {
-                    connection.send(`<div id="p2_name">${readP2Name}</div>`)
+                    connection.send(`<div id="p2_name">${parsedNameP2}</div>`)
                 })
             }
 
