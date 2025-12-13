@@ -1,5 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=BBH+Hegarty&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap");
+@font-face {
+  font-family: "citybrawlersboldcaps";
+  src: url("./fonts/citybrawlersboldcaps-webfont.woff2") format("woff2"),
+    url("./fonts/citybrawlersboldcaps-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 *,
 *:after,
 *:before {
@@ -90,7 +98,6 @@ body {
 }
 
 /* Tekken 8 overlay */
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
 .overlay.tekken {
   background: url("../img/t8-overlay.png") no-repeat;
@@ -115,6 +122,15 @@ body {
 .overlay.tekken .player-left-container .player-left-name,
 .overlay.tekken .player-right-container .player-right-name {
   bottom: 0%;
+  width: 100%;
+}
+.overlay.tekken .player-left-container .player-left-name {
+  left: 40%;
+  transform:translateX(-50%);
+}
+.overlay.tekken .player-right-container .player-right-name {
+  left: 23%;
+  transform:translateX(-50%);
 }
 
 .overlay.tekken .player-left-container .player-left-country,
@@ -129,19 +145,27 @@ body {
 .overlay.tekken .player-left-container,
 .overlay.tekken .player-right-container,
 .overlay.tekken .rounds-container {
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
+  font-family: "BBH Hegarty", sans-serif;
+  font-weight: 400;
   font-style: normal;
-  text-shadow: #000 3px 0 3px;
+  text-shadow: #8c8181 3px 4px 3px;
+  color: #000;
 }
 
-.overlay.tekken .player-left-country {
+.overlay.tekken .player-left-container .player-left-country {
   margin-left: 0.7rem;
 }
 
 .overlay.tekken .player-right-container .player-right-country {
   position: relative;
-  right: -2rem;
+  right: 0.8rem;
+  transform: skew(47deg);
+}
+
+.overlay.tekken .player-left-container .player-left-country {
+  position: relative;
+  left: 2rem;
+  transform: skew(-47deg);
 }
 
 .overlay.tekken .player-right-country {
@@ -150,19 +174,16 @@ body {
 
 .overlay.tekken .player-left-container .player-left-score,
 .overlay.tekken .player-right-container .player-right-score {
-  color: #fff;
+  color: #000;
   transform: skewX(0);
+  text-align: center;
   top: 0;
+  width: 16%;
+  margin-left: 7rem;
 }
 
 .overlay.tekken .player-left-container .player-left-score {
-  width: 33%;
-}
-
-.overlay.tekken .player-right-container .player-right-score {
-  width: 16%;
-  margin-left: 6.5rem;
-  right: -7.5%;
+  margin-right: 7.3rem;
 }
 
 .overlay.tekken .rounds-container {
@@ -172,13 +193,6 @@ body {
 
 /* Street fighter 6 overlay */
 
-@font-face {
-  font-family: "citybrawlersboldcaps";
-  src: url("./fonts/citybrawlersboldcaps-webfont.woff2") format("woff2"),
-    url("./fonts/citybrawlersboldcaps-webfont.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
 .overlay.streetfighter6 {
   background: url("../img/sf6-overlay.png") no-repeat;
 }
@@ -186,7 +200,7 @@ body {
 .overlay.overlay.streetfighter6 .overlay-container {
   width: 74%;
   transform: translate(-50%, 15%);
-  top: 0;
+  top: -0.5rem;
 }
 
 .overlay.streetfighter6 .player-left-container,
@@ -248,7 +262,7 @@ body {
 }
 
 /*2kxo overlay*/
-@import url("https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap");
+
 /* 
 <weight>: Use a value from 100 to 900
 <element shape>: Use a value from 0 to 100
@@ -298,7 +312,7 @@ body {
 
 .overlay.twoxko .player-left-container .player-left-name,
 .overlay.twoxko .player-right-container .player-right-name {
-    bottom: 25%;
+  bottom: 25%;
 }
 
 .overlay.twoxko .player-left-container .player-left-name {
