@@ -1,4 +1,4 @@
 node_modules
-__index.html
-_index.html
+top8-token.txt
 package-lock.json
+*.env

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    <link rel="stylesheet" href="../../css/top8.css" />
+    <title>Top8</title>
+  </head>
+
+  <body>
+    <div
+      id="top8"
+      hx-trigger="load every 15s"
+      hx-swap="innerHTML"
+      hx-indicator="#loading"
+    ></div>
+    <div id="loading" style="display: none">Loading...</div>
+    <script>
+      // Hämta query-parametrar från URL
+      const params = new URLSearchParams(window.location.search);
+      const event = params.get("event") || "";
+      const tournament = params.get("tournament") || "";
+
+      // Sätt hx-get dynamiskt
+      const top8Div = document.getElementById("top8");
+      top8Div.setAttribute(
+        "hx-get",
+        `/top8-bracket?tournament=${encodeURIComponent(
+          tournament
+        )}&event=${encodeURIComponent(event)}`
+      );
+    </script>
+  </body>
+</html>
