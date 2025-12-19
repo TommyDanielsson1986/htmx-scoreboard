@@ -352,7 +352,7 @@ body {
 
 /** King of fighters (any version) */
 .overlay.kof-13 {
-  background: url("../img/kof-overlay.png") no-repeat;
+  background: url("../img/KOF13-overlay.png") no-repeat;
 }
 
 .overlay.kof-13 .overlay-container {
