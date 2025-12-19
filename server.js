@@ -2,7 +2,7 @@ import express from "express";
 import expressWebsocket from "express-ws";
 import fs from "node:fs";
 import fetch from "node-fetch";
-import 'dotenv/config';
+import "dotenv/config";
 const app = express();
 expressWebsocket(app);
 
@@ -18,120 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Parse JSON bodies (as sent by API client)
 app.use(express.json());
-
-app.get("/api/v1/flags", (req, res) => {
-  res.send(flagsResult);
-});
-
-app.ws("/players-info", function connection(ws, res) {
-  connections.push(ws);
-  ws.on("message", function incoming(message) {
-    const parsedNameP1 = JSON.parse(message.toString())["player-one-name"];
-    const parsedScoreP1 = JSON.parse(message.toString())["player-one-score"];
-    const parsedNameP2 = JSON.parse(message.toString())["player-two-name"];
-    const parsedScoreP2 = JSON.parse(message.toString())["player-two-score"];
-    const parseFlagP1 = JSON.parse(message.toString())["player-one-flag"];
-    const parseFlagP2 = JSON.parse(message.toString())["player-two-flag"];
-    const parseSwap = JSON.parse(message.toString())["swap"];
-    const parseClicked = JSON.parse(message.toString())["updateInfo"];
-
-    if (parseSwap === "0") {
-      if (parsedNameP1) {
-        connections.forEach((connection) => {
-          connection.send(`<div id="p1_name">${parsedNameP1}</div>`);
-        });
-      }
-
-      if (parsedScoreP1) {
-        connections.forEach((connection) => {
-          connection.send(`<div id="p1_score">${parsedScoreP1}</div>`);
-        });
-      }
-
-      if (parsedNameP2) {
-        connections.forEach((connection) => {
-          connection.send(`<div id="p2_name">${parsedNameP2}</div>`);
-        });
-      }
-
-      if (parsedScoreP2) {
-        connections.forEach((connection) => {
-          connection.send(`<div id="p2_score">${parsedScoreP2}</div>`);
-        });
-      }
-
-      if (parseFlagP1) {
-        connections.forEach((connection) => {
-          connection.send(
-            `<img id="flag_p1" class="country" src="../../img/flags/${parseFlagP1}.png" alt="flag">`
-          );
-        });
-      }
-
-      if (parseFlagP2) {
-        connections.forEach((connection) => {
-          connection.send(
-            `<img id="flag_p2" class="country" src="../../img/flags/${parseFlagP2}.png" alt="flag">`
-          );
-        });
-      }
-    }
-
-    if (parseSwap === "1") {
-      if (parsedNameP2) {
-        connections.forEach((connection) => {
-          connection.send(`<div id="p1_name">${parsedNameP2}</div>`);
-        });
-      }
-
-      if (parsedScoreP2) {
-        connections.forEach((connection) => {
-          connection.send(`<div id="p1_score">${parsedScoreP2}</div>`);
-        });
-      }
-
-      if (parsedNameP1) {
-        connections.forEach((connection) => {
-          connection.send(`<div id="p2_name">${parsedNameP1}</div>`);
-        });
-      }
-
-      if (parsedScoreP1) {
-        connections.forEach((connection) => {
-          connection.send(`<div id="p2_score">${parsedScoreP1}</div>`);
-        });
-      }
-
-      if (parseFlagP2) {
-        connections.forEach((connection) => {
-          connection.send(
-            `<img id="flag_p1" class="country" src="../../img/flags/${parseFlagP2}.png" alt="flag">`
-          );
-        });
-      }
-
-      if (parseFlagP1) {
-        connections.forEach((connection) => {
-          connection.send(
-            `<img id="flag_p2" class="country" src="../../img/flags/${parseFlagP1}.png" alt="flag">`
-          );
-        });
-      }
-    }
-  });
-});
-
-app.ws("/tournament-rounds", function connection(ws, res) {
-  connections.push(ws);
-  ws.on("message", function incoming(message) {
-    const parsedRound = JSON.parse(message.toString())["round"];
-    if (parsedRound) {
-      connections.forEach((connection) => {
-        connection.send(`<div id="round" class="round">${parsedRound}</div>`);
-      });
-    }
-  });
-});
 
 // Top 8 Bracket route
 app.get("/top8-bracket", async (req, res) => {
@@ -290,16 +176,21 @@ app.get("/top8-bracket", async (req, res) => {
           set.winnerId === set.entrant1?.id ? "winner" : ""
         }">
           <span>${set.entrant1?.name || "TBD"}</span>
-          <span class="score"> ${typeof set.entrant1Score === "number" || set.entrant1Score === "DQ"
-    ? set.entrant1Score
-    : ""}</span>
+          <span class="score"> ${
+            typeof set.entrant1Score === "number" || set.entrant1Score === "DQ"
+              ? set.entrant1Score
+              : ""
+          }</span>
         </div>
         <div class="player ${
           set.winnerId === set.entrant2?.id ? "winner" : ""
         }">
           <span>${set.entrant2?.name || "TBD"}</span>
-          <span class="score"> ${typeof set.entrant2Score === "number" || set.entrant2Score === "DQ"
-    ? set.entrant2Score : ""}</span>
+          <span class="score"> ${
+            typeof set.entrant2Score === "number" || set.entrant2Score === "DQ"
+              ? set.entrant2Score
+              : ""
+          }</span>
         </div>
       </div>
     `;
@@ -334,6 +225,84 @@ app.get("/top8-bracket", async (req, res) => {
     console.error(err);
     res.status(500).send("Failed to fetch Top 8");
   }
+});
+
+// Helper: hämta nästa set på en specifik stream
+async function fetchSlots(tourneySlug, streamName) {
+  const query = `
+    query StreamQueueOnTournament($tourneySlug: String!) {
+      tournament(slug: $tourneySlug) {
+        streamQueue {
+          stream {
+            streamName
+          }
+          sets {
+            id
+            fullRoundText
+            slots {
+              entrant { name }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const response = await fetch("https://api.start.gg/gql/alpha", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.STARTGG_API_KEY}`
+      },
+      body: JSON.stringify({ query, variables: { tourneySlug } })
+    });
+
+    const json = await response.json();
+
+    // Logga hela streamQueue för debug
+    console.log("=== STREAM QUEUE ===");
+    console.log(JSON.stringify(json.data?.tournament?.streamQueue, null, 2));
+
+    if (json.errors) {
+      console.error(json.errors);
+      return [];
+    }
+
+    const streams = json.data?.tournament?.streamQueue || [];
+    const stream = streams.find(s => s.stream.streamName === streamName);
+
+    if (!stream) {
+      console.warn(`Stream "${streamName}" hittades inte i streamQueue.`);
+      return [];
+    }
+
+    const nextSet = stream.sets[0]; // första set i queue
+    if (!nextSet) {
+      console.warn(`Ingen set i queue för stream "${streamName}"`);
+      return [];
+    }
+
+    return nextSet.slots;
+
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
+// Endpoint: hämta en spelares namn
+app.get("/api/player-name", async (req, res) => {
+  const { tourneySlug, streamName, slot } = req.query;
+  if (!tourneySlug || !streamName || slot === undefined) {
+    return res.status(400).send("Missing tourneySlug, streamName or slot");
+  }
+
+  const slots = await fetchSlots(tourneySlug, streamName);
+  const index = parseInt(slot);
+  const name = slots[index]?.entrant?.name ?? `Player ${index + 1}`;
+
+  res.send(`<div id="p${index + 1}_name">${name}</div>`);
 });
 
 // Start the server
