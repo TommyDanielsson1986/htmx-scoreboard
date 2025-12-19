@@ -2,6 +2,7 @@ import express from "express";
 import expressWebsocket from "express-ws";
 import fs from "node:fs";
 import fetch from "node-fetch";
+import 'dotenv/config';
 const app = express();
 expressWebsocket(app);
 
@@ -178,7 +179,7 @@ app.get("/top8-bracket", async (req, res) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer 26d0a0ad2bc2313d01d3dd91636455fd`,
+        Authorization: `Bearer ${process.env.STARTGG_API_KEY}`,
       },
       body: JSON.stringify({ query, variables: { eventSlug: fullSlug } }),
     });
@@ -336,6 +337,6 @@ app.get("/top8-bracket", async (req, res) => {
 });
 
 // Start the server
-app.listen(5000, () => {
-  console.log("Server listning on port 5000");
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Server listning on port ${process.env.PORT || 3000}`);
 });
