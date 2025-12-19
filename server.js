@@ -328,13 +328,13 @@ app.get("/api/player-name", async (req, res) => {
   const flag = (flags[displayName] || "hide").toLowerCase();
 
   res.send(`
-    <div id="p${index + 1}_name">
+    <img id="p${
+      index + 1
+    }_flag" class="country" src="../../img/flags/${flag}.png" alt="flag">
+   
+    <div id="p${index + 1}_name" class="p${index + 1}-name">
       ${displayName}
     </div>
-     <img id="p${
-       index + 1
-     }_flag" class="country" src="../../img/flags/${flag}.png" alt="flag">
-    
   `);
 });
 

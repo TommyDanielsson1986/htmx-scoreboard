@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap");
+.overlay.kof13 {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  background: url("../img/KOF13-overlay.png") no-repeat;
+  color: #000;
+}
+
+.overlay-container {
+  overflow: hidden;
+  position: relative;
+  height: 1080px;
+  width: 1920px;
+}
+
+.player-container,
+.rounds-container {
+  display: flex;
+  position: absolute;
+  top: 50px;
+}
+
+.rounds {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0.3125rem;
+  font-size: 3rem;
+  margin-top: 15px;
+}
+
+.player-left {
+  left: 275px;
+  width: 30%;
+}
+
+.player-right {
+  flex-direction: row-reverse;
+  right: 275px;
+  width: 30%;
+}
+
+.player-left,
+.player-right {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.player-left .p1-name,
+.player-right .p2-name {
+  width: 77%;
+  text-align: center;
+  font-size: 2.3rem;
+}
+
+.player-left .p1-score,
+.player-right .p2-score {
+  position: absolute;
+  top: -6px;
+  font-size: 4rem;
+}
+
+.player-left .p1-score {
+  left: 90%;
+}
+
+.player-right .p2-score {
+  left: 0%;
+}
+
+.overlay-container .player-container .country {
+  width: 70px;
+  height: auto;
+  object-fit: cover;
+}

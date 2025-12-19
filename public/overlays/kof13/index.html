@@ -1,90 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script
-    src="https://unpkg.com/htmx.org@1.9.10"
-    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-    crossorigin="anonymous"
-  ></script>
-  <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
-  <link rel="stylesheet" href="../../css/overlay.css" />
-  <title>FGC Overlay</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    <link rel="stylesheet" href="../../css/overlay-kof13.css" />
+    <title>FGC overlay</title>
+  </head>
 
-<body>
-  <main class="overlay kof-13" id="overlay-theme">
-    <div class="overlay-container">
-      <div class="player-left-container" hx-ext="ws" ws-connect="ws://localhost:5000/players-info">
-        <div class="player-left-country">
-          <img id="flag_p1" class="country" src="../../img/flags/hide.png" alt="flag" />
+  <body>
+    <main class="overlay kof13" id="overlay-theme">
+      <div class="overlay-container" id="overlayContainer">
+        <!-- Player 1 -->
+        <div id="p1_container" class="player-container player-left">
+          <div
+            hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
+            hx-trigger="load, every 10s"
+            hx-swap="outerHTML"
+          >
+            <div id="p1_name">Player 1</div>
+          </div>
+
+          <div id="p1_score" class="p1-score">0</div>
         </div>
-        <div class="player-left-name">
-          <div id="p1_name">Player 1</div>
+
+        <!-- ROUNDS (RÖRS ALDRIG) -->
+        <div class="rounds-container rounds">
+          <div id="round" class="round">FT 2</div>
         </div>
-        <div class="player-left-score">
-          <div id="p1_score">0</div>
+
+        <!-- Player 2 -->
+        <div id="p2_container" class="player-container player-right">
+          <div
+            hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=1"
+            hx-trigger="load, every 15s"
+            hx-swap="outerHTML"
+          >
+            <div id="p2_name">Player 2</div>
+          </div>
+          <div id="p2_score" class="p2-score">0</div>
         </div>
       </div>
+    </main>
 
-      <div class="rounds-container" hx-ext="ws" ws-connect="ws://localhost:5000/tournament-rounds">
-        <div id="round" class="round">FT 2</div>
-      </div>
+    <script>
+      const ws = new WebSocket("ws://localhost:5000/score");
 
-      <div class="player-right-container" hx-ext="ws" ws-connect="ws://localhost:5000/players-info">
-        <div class="player-right-score">
-          <div id="p2_score">0</div>
-        </div>
-        <div class="player-right-name">
-          <div id="p2_name">Player 2</div>
-        </div>
-        <div class="player-right-country">
-          <img id="flag_p2" class="country" src="../../img/flags/hide.png" alt="flag" />
-        </div>
-      </div>
-    </div>
-  </main>
+      const p1 = document.getElementById("p1_container");
+      const p2 = document.getElementById("p2_container");
+      const round = document.getElementById("round");
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const maxLength = 10;       // antal tecken innan skalning
-      const defaultFontSize = 2;  // rem, standardstorlek
-      const minFontSize = 1.25;   // rem, minsta storlek
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
 
-      const ids = ["p1_name", "p2_name"];
+        // SCORE
+        if (typeof data.p1 === "number") {
+          document.getElementById("p1_score").textContent = data.p1;
+        }
+        if (typeof data.p2 === "number") {
+          document.getElementById("p2_score").textContent = data.p2;
+        }
 
-      function adjustFontSize() {
-        ids.forEach((id) => {
-          const el = document.getElementById(id);
-          if (!el) return;
-          const textLength = el.textContent.trim().length;
+        // ROUND
+        if (data.round) {
+          round.textContent = data.round;
+        }
 
-          let fontSize;
-          if (textLength <= maxLength) {
-            fontSize = defaultFontSize;
+        // SWAP = KLASSBYTE (INTE DOM-MASSAKER)
+        if (typeof data.swap === "boolean") {
+          if (data.swap) {
+            p1.classList.replace("player-left", "player-right");
+            p2.classList.replace("player-right", "player-left");
           } else {
-            fontSize = Math.max(minFontSize, defaultFontSize - 0.1 * (textLength - maxLength));
+            p1.classList.replace("player-right", "player-left");
+            p2.classList.replace("player-left", "player-right");
           }
-
-          el.style.fontSize = fontSize + "rem";
-          console.log(`${id} text length: ${textLength}, font-size: ${fontSize}rem`);
-        });
-      }
-
-      // Kör initialt
-      adjustFontSize();
-
-      // Observera hela container för att fånga alla textändringar via HTMX/WS
-      const container = document.querySelector(".overlay-container");
-      if (container) {
-        const observer = new MutationObserver(adjustFontSize);
-        observer.observe(container, {
-          childList: true,
-          subtree: true
-        });
-      }
-    });
-  </script>
-</body>
+        }
+      };
+    </script>
+  </body>
 </html>

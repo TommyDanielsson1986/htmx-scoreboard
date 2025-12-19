@@ -12,10 +12,9 @@
   <body>
     <main class="overlay twoxko" id="overlay-theme">
       <div class="overlay-container" id="overlayContainer">
-        <!-- Player 1 Container -->
-        <div id="p1_container" class="player-container">
+        <!-- Player 1 -->
+        <div id="p1_container" class="player-container player-left">
           <div
-            class="player-left-name"
             hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
             hx-trigger="load, every 10s"
             hx-swap="outerHTML"
@@ -23,56 +22,24 @@
             <div id="p1_name">Player 1</div>
           </div>
 
-          <div
-            class="player-left-score"
-            hx-ext="ws"
-            ws-connect="ws://localhost:5000/score"
-          >
-            <div id="p1_score">0</div>
-          </div>
-
-          <div class="player-left-flag">
-            <img
-              id="flag_p1"
-              src="../../img/flags/hide.png"
-              alt="flag"
-              class="country"
-            />
-          </div>
+          <div id="p1_score" class="p1-score">0</div>
         </div>
-        <!-- Rounds -->
-        <div class="rounds-container">
+
+        <!-- ROUNDS (RÖRS ALDRIG) -->
+        <div class="rounds-container rounds">
           <div id="round" class="round">FT 2</div>
         </div>
 
-        <!-- Player 2 Container -->
-        <div id="p2_container" class="player-container">
+        <!-- Player 2 -->
+        <div id="p2_container" class="player-container player-right">
           <div
-            class="player-right-name"
             hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=1"
             hx-trigger="load, every 15s"
             hx-swap="outerHTML"
           >
             <div id="p2_name">Player 2</div>
           </div>
-
-          <div
-            class="player-right-score"
-            hx-ext="ws"
-            hx-swap="outerHTML"
-            ws-connect="ws://localhost:5000/score"
-          >
-            <div id="p2_score">0</div>
-          </div>
-
-          <div class="player-right-flag">
-            <img
-              id="flag_p2"
-              src="../../img/flags/hide.png"
-              alt="flag"
-              class="country"
-            />
-          </div>
+          <div id="p2_score" class="p2-score">0</div>
         </div>
       </div>
     </main>
@@ -80,37 +47,35 @@
     <script>
       const ws = new WebSocket("ws://localhost:5000/score");
 
-      const overlayContainer = document.getElementById("overlayContainer");
       const p1 = document.getElementById("p1_container");
       const p2 = document.getElementById("p2_container");
       const round = document.getElementById("round");
 
-      // Spara referens: rounds ska alltid ligga i mitten
-      const roundsNode = round.parentElement;
-
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
 
-        // Score
-        const p1Score = document.getElementById("p1_score");
-        const p2Score = document.getElementById("p2_score");
-        if (p1Score) p1Score.textContent = data.p1;
-        if (p2Score) p2Score.textContent = data.p2;
+        // SCORE
+        if (typeof data.p1 === "number") {
+          document.getElementById("p1_score").textContent = data.p1;
+        }
+        if (typeof data.p2 === "number") {
+          document.getElementById("p2_score").textContent = data.p2;
+        }
 
-        // Round
-        if (data.round && round) {
+        // ROUND
+        if (data.round) {
           round.textContent = data.round;
         }
 
-        // Swap (VIKTIGT)
-        if (data.swap === true) {
-          overlayContainer.insertBefore(p2, roundsNode);
-          overlayContainer.insertBefore(p1, null);
-        }
-
-        if (data.swap === false) {
-          overlayContainer.insertBefore(p1, roundsNode);
-          overlayContainer.insertBefore(p2, null);
+        // SWAP = KLASSBYTE (INTE DOM-MASSAKER)
+        if (typeof data.swap === "boolean") {
+          if (data.swap) {
+            p1.classList.replace("player-left", "player-right");
+            p2.classList.replace("player-right", "player-left");
+          } else {
+            p1.classList.replace("player-right", "player-left");
+            p2.classList.replace("player-left", "player-right");
+          }
         }
       };
     </script>
