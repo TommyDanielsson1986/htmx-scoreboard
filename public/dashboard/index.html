@@ -5,165 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
-    <link rel="stylesheet" href="../css/dashboard-settings.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
     <title>Overlay settings</title>
   </head>
 
   <body>
     <h1>Dashboard Settings</h1>
     <div class="overlay-settings">
-      <div hx-ext="ws" ws-connect="/players-info">
+      <div hx-ext="ws" ws-connect="/score">
         <form>
           <div class="player-1">
-            <h2>Player 1 info</h2>
-            <label for="player-one-score">
-              <span>Score</span>
+            <label
+              >Score
               <div class="buttons">
-                <button type="button" class="add-button" onclick="addP1Score()">
-                  +
-                </button>
-                <input
-                  type="text"
-                  value="0"
-                  id="player-one-score"
-                  name="player-one-score"
-                />
-                <button
-                  type="button"
-                  class="remove-button"
-                  onclick="removeP1Score()"
-                >
-                  -
-                </button>
+                <button type="button" onclick="addP1Score()">+</button>
+                <input type="text" id="player-one-score" value="0" />
+                <button type="button" onclick="removeP1Score()">-</button>
               </div>
             </label>
           </div>
+
           <div class="player-2">
-            <h2>Player 2 info</h2>
-            <label for="player-two-score">
-              <span>Score</span>
+            <label
+              >Score
               <div class="buttons">
-                <button type="button" class="add-button" onclick="addP2Score()">
-                  +
-                </button>
-                <input
-                  type="text"
-                  value="0"
-                  id="player-two-score"
-                  name="player-two-score"
-                />
-                <button
-                  type="button"
-                  class="remove-button"
-                  onclick="removeP2Score()"
-                >
-                  -
-                </button>
+                <button type="button" onclick="addP2Score()">+</button>
+                <input type="text" id="player-two-score" value="0" />
+                <button type="button" onclick="removeP2Score()">-</button>
               </div>
             </label>
           </div>
-          <div class="buttons">
-            <button type="button" ws-send name="swap" id="updateInfo" value="0">
-              Update Info
-            </button>
-          </div>
+          <label
+            >Round:
+            <input type="text" id="round-input" value="FT 2" />
+          </label>
+          <br />
+          <button type="button" onclick="updateScore()">Update Score</button>
+          <button type="button" onclick="updateRound()">Update Round</button>
+          <br />
+          <button type="button" onclick="triggerSwap()">Swap</button>
         </form>
       </div>
     </div>
-    <div class="rounds" hx-ext="ws" ws-connect="/tournament-rounds">
-      <form>
-        <h2>Rounds</h2>
-        <label for="rounds">
-          <span>Round</span>
-          <input type="text" name="round" />
-        </label>
-        <button type="button" ws-send>Update Round</button>
-      </form>
-    </div>
-
-    <div class="swap" hx-ext="ws" ws-connect="/swap-info">
-      <form>
-        <h2>Swap info</h2>
-        <button
-          type="button"
-          ws-send
-          name="swap"
-          id="swapButton"
-          onclick="swapValue()"
-          value="0"
-        >
-          Swap
-        </button>
-      </form>
-    </div>
 
     <script>
-      let getFlags = async () => {
-        let response = await fetch("/api/v1/flags");
-        let result = await response.json();
-        let selectBox = document.querySelectorAll(".flag");
-        let flagOptions = "<option value='hide' default='true'>Hide</option>";
-        flagOptions += "<option value='pirate' default='true'>Pirate</option>";
+      const ws = new WebSocket("ws://localhost:5000/score");
 
-        //Order the flag names by A-Ö
-        result["flags"].sort(function (a, b) {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
-        });
+      function updateRound() {
+        const round = document.getElementById("round-input").value;
+        ws.send(JSON.stringify({ round }));
+      }
 
-        for (let i = 0; i < result["flags"].length; i++) {
-          flagOptions += `<option value=${result["flags"][i].code}>${result["flags"][i].name}</option>`;
-        }
+      function updateScore() {
+        const p1 = Number(document.getElementById("player-one-score").value);
+        const p2 = Number(document.getElementById("player-two-score").value);
+        ws.send(
+          JSON.stringify({ "player-one-score": p1, "player-two-score": p2 })
+        );
+      }
 
-        selectBox[0].innerHTML = flagOptions;
-        selectBox[1].innerHTML = flagOptions;
-      };
+      function triggerSwap() {
+        ws.send(JSON.stringify({ swap: true }));
+      }
 
-      /* selectBox.append(`<option value=${result['flags'][i].code}>${result['flags'][i].name}</option>`);  */
-
-      let addP1Score = () => {
-        let score = document.querySelector("#player-one-score");
-        let newValue = Number(score.value++);
-        return newValue;
-      };
-
-      let removeP1Score = () => {
-        let score = document.querySelector("#player-one-score");
-        let newValue = Number(score.value--);
-        return newValue;
-      };
-
-      let addP2Score = () => {
-        let score = document.querySelector("#player-two-score");
-        let newValue = Number(score.value++);
-        return newValue;
-      };
-
-      let removeP2Score = () => {
-        let score = document.querySelector("#player-two-score");
-        let newValue = Number(score.value--);
-        return newValue;
-      };
-
-      let swapValue = () => {
-        let button = document.querySelector("#swapButton");
-        let updateButton = document.querySelector("#updateInfo");
-        if (button.value === "0") {
-          updateButton.value = "1";
-          return (button.value = "1");
-        } else {
-          updateButton.value = "0";
-          return (button.value = "0");
-        }
-      };
-      window.addEventListener("load", function () {
-        getFlags();
-      });
+      function addP1Score() {
+        const input = document.getElementById("player-one-score");
+        input.value = Number(input.value) + 1;
+      }
+      function removeP1Score() {
+        const input = document.getElementById("player-one-score");
+        input.value = Math.max(0, Number(input.value) - 1);
+      }
+      function addP2Score() {
+        const input = document.getElementById("player-two-score");
+        input.value = Number(input.value) + 1;
+      }
+      function removeP2Score() {
+        const input = document.getElementById("player-two-score");
+        input.value = Math.max(0, Number(input.value) - 1);
+      }
     </script>
   </body>
 </html>

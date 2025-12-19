@@ -329,12 +329,59 @@ app.get("/api/player-name", async (req, res) => {
 
   res.send(`
     <div id="p${index + 1}_name">
-      <img class="country" src="../../img/flags/${flag}.png" alt="flag">
       ${displayName}
     </div>
+     <img id="p${
+       index + 1
+     }_flag" class="country" src="../../img/flags/${flag}.png" alt="flag">
+    
   `);
 });
 
+app.ws("/tournament-rounds", (ws, req) => {
+  ws.on("message", (msg) => {
+    // Skicka round-text
+    ws.send(JSON.stringify({ round: msg }));
+  });
+});
+
+const scoreConnections = [];
+let currentScore = { p1: 0, p2: 0, swap: false };
+
+// Score WS
+// WebSocket för score + swap + round
+app.ws("/score", (ws, req) => {
+  scoreConnections.push(ws);
+
+  // Skicka nuvarande state direkt till ny klient
+  ws.send(JSON.stringify(currentScore));
+
+  ws.on("message", (msg) => {
+    const data = JSON.parse(msg);
+
+    // Score
+    if (data["player-one-score"] !== undefined)
+      currentScore.p1 = parseInt(data["player-one-score"]);
+    if (data["player-two-score"] !== undefined)
+      currentScore.p2 = parseInt(data["player-two-score"]);
+
+    // Swap: växla varje gång dashboard skickar swap
+    if (data.swap) currentScore.swap = !currentScore.swap;
+
+    // Round: uppdatera round-text
+    if (data.round !== undefined) currentScore.round = data.round;
+
+    // Skicka uppdatering till alla klienter
+    scoreConnections.forEach((conn) => {
+      if (conn.readyState === 1) conn.send(JSON.stringify(currentScore));
+    });
+  });
+
+  ws.on("close", () => {
+    const index = scoreConnections.indexOf(ws);
+    if (index > -1) scoreConnections.splice(index, 1);
+  });
+});
 // Start the server
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server listning on port ${process.env.PORT || 3000}`);
