@@ -329,7 +329,7 @@ app.get("/api/player-name", async (req, res) => {
 
   res.send(`
     <div id="p${index + 1}_name">
-      <img class="country" src="img/flags/${flag}.png" alt="flag">
+      <img class="country" src="../../img/flags/${flag}.png" alt="flag">
       ${displayName}
     </div>
   `);

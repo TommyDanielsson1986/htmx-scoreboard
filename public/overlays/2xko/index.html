@@ -12,11 +12,16 @@
   <body>
     <main class="overlay twoxko" id="overlay-theme">
       <div class="overlay-container">
-        <div class="player-left-name"
-             hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
-             hx-trigger="load, every 10s"
-             hx-swap="outerHTML">
+        <div
+          class="player-left-name"
+          hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
+          hx-trigger="load, every 10s"
+          hx-swap="outerHTML"
+        >
           <div id="p1_name">Player 1</div>
+        </div>
+        <div class="player-left-score">
+          <div id="p1_score">0</div>
         </div>
         <div
           class="player-right-name"
@@ -25,6 +30,14 @@
           hx-swap="outerHTML"
         >
           <div id="p2_name">Player 2</div>
+        </div>
+        <div 
+        class="player-right-score"
+        hx-ext="ws" 
+        ws-connect="ws://localhost:5000/score"
+        >
+        
+        <div id="p2_score">0</div>
         </div>
       </div>
     </main>
