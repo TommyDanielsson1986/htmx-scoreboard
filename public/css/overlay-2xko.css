@@ -1,5 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap");
 .overlay.twoxko {
-    background-image: url('../img/2xko-overlay.png');
-    width: 1920px;
-    height: 1080px;
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  background-image: url("../img/2xko-overlay.png");
+  width: 1920px;
+  height: 1080px;
 }

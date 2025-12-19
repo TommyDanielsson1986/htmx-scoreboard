@@ -1,4 +1,4 @@
-# Overlay with HTMX + ExpressJS v1
+# Overlay with HTMX + ExpressJS v2
 
 ## What you need?
 1. You need nodeJS (https://nodejs.org/en/download)
@@ -17,4 +17,11 @@ To get to overlay: `http://localhost:5000/overlays/*Game name*`
 - Tekken 8
 - King Of Fighters 13
 
-This is just V1, V2 will be a lot easier to use.
+## No name?
+This time its based on Start.gg instead of manually write them in
+
+## No Flag?
+This time its based on name via Start.gg, example:
+- If you are regular attentat to certain weekly tournament then once your name has located we will "save" it.
+- Once your name is regeristred in our file we will just add your flag. 
+- If you dont want flag you wont get one (that easy).
