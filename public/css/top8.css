@@ -1,3 +1,4 @@
+/** Default setting */
 .bracket-container {
   font-size: 2rem;
   font-family: sans-serif;
@@ -29,7 +30,7 @@
 }
 
 .match {
-  color:#000;
+  color: #000;
   font-weight: bold;
   margin: 0.325rem;
   border: 5px solid #000;
@@ -37,8 +38,8 @@
   border-radius: 4px;
 }
 
-.match:nth-child(3) {
-    margin-bottom: 1rem;
+.bracket-container .match:nth-child(3) {
+  margin-bottom: 1rem;
 }
 .player {
   display: flex;
@@ -51,4 +52,58 @@
 }
 .score {
   margin-left: 1rem;
+}
+
+/** KOF setting */
+.kof {
+  overflow: hidden;
+}
+.kof > .bracket-container {
+  position: relative;
+  background: transparent url("../img/kofwallpaper.webp") center/cover;
+  width: 100%;
+  height: auto;
+  color: #fff;
+}
+
+.kof > .bracket-container::before {
+  content: "";                      /* krävs alltid för pseudo-element */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5); /* din overlay-färg */
+  z-index: 1;                       /* ovanpå bakgrundsbilden */
+  pointer-events: none; 
+}
+
+.kof > .bracket-container > h1,
+.kof .bracket-container .round {
+  position: relative;
+  z-index:10;
+}
+
+.kof .bracket-container .match {
+  color: #fff;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.kof .bracket-container .winners .round:nth-of-type(n + 2) .match:first-of-type,
+.kof .bracket-container .losers .round:nth-of-type(n + 2) .match:first-of-type {
+  
+  margin-bottom: 0;
+}
+.kof .bracket-container .winners .round:nth-of-type(2) .match:first-of-type {
+  margin-top: 10.75rem;
+}
+
+.kof .bracket-container .winners .round:nth-of-type(3) .match:first-of-type,
+.kof .bracket-container .winners .round:nth-of-type(4) .match:first-of-type {
+  margin-top: 14.6875rem;
+}
+
+/** Losers side */
+.kof .bracket-container .losers .round:nth-of-type(n + 2) .match:first-of-type {
+  margin-top: 6.25rem;
 }

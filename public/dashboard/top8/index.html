@@ -26,9 +26,10 @@
       const params = new URLSearchParams(window.location.search);
       const event = params.get("event") || "";
       const tournament = params.get("tournament") || "";
-
+      const game = params.get("game") || "";
       // Sätt hx-get dynamiskt
-      const top8Div = document.getElementById("top8");
+      const top8Div = document.querySelector("#top8");
+      top8Div.classList.add(game)
       top8Div.setAttribute(
         "hx-get",
         `/top8-bracket?tournament=${encodeURIComponent(

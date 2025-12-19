@@ -191,7 +191,7 @@ app.get("/top8-bracket", async (req, res) => {
     // Samla Top 8 sets
     const top8Sets = [];
     const top8Regex =
-      /grand final reset|grand final|winner final|winners semi-final|winners quarter-final|loser final|losers semi-final|losers quarter-final|top 8/i;
+      /grand final reset|grand final|winner final|winners semi-final|winners quarter-final|losers final|losers semi-final|losers quarter-final|top 8/i;
 
     event.phases.forEach((phase) => {
       phase.phaseGroups.nodes.forEach((pg) => {
@@ -289,13 +289,16 @@ app.get("/top8-bracket", async (req, res) => {
           set.winnerId === set.entrant1?.id ? "winner" : ""
         }">
           <span>${set.entrant1?.name || "TBD"}</span>
-          <span class="score">${set.entrant1Score}</span>
+          <span class="score"> ${typeof set.entrant1Score === "number" || set.entrant1Score === "DQ"
+    ? set.entrant1Score
+    : ""}</span>
         </div>
         <div class="player ${
           set.winnerId === set.entrant2?.id ? "winner" : ""
         }">
           <span>${set.entrant2?.name || "TBD"}</span>
-          <span class="score">${set.entrant2Score}</span>
+          <span class="score"> ${typeof set.entrant2Score === "number" || set.entrant2Score === "DQ"
+    ? set.entrant2Score : ""}</span>
         </div>
       </div>
     `;

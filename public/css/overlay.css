@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=BBH+Hegarty&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @font-face {
   font-family: "citybrawlersboldcaps";
   src: url("./fonts/citybrawlersboldcaps-webfont.woff2") format("woff2"),
@@ -348,3 +349,45 @@ body {
 .overlay.twoxko .player-right-container .player-right-country {
   right: 13%;
 }
+
+/** King of fighters (any version) */
+.overlay.kof-13 {
+  background: url("../img/kof-overlay.png") no-repeat;
+}
+
+.overlay.kof-13 .overlay-container {
+  width: auto;
+  padding: 67px 280px;
+  top: 0;
+  transform: translate(-50%, 0);
+}
+
+.overlay.kof-13 .player-left-container,
+.overlay.kof-13 .player-right-container,
+.overlay.kof-13 .rounds-container {
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.overlay.kof-13 .player-left-container .player-left-name,
+.overlay.kof-13 .player-right-container .player-right-name,
+.overlay.kof-13 .rounds-container .round {
+  color: #000;
+}
+
+.overlay.kof-13 .rounds-container {
+  padding-bottom: 0;
+  position: relative;
+}
+
+.overlay.kof-13 .rounds-container .round {
+font-size: 1.3rem;
+  font-weight: bold;
+  top: -30px;
+  position: absolute;
+  transform: translateY(0);
+}
+
+
+
