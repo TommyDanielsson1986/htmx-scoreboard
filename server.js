@@ -253,9 +253,9 @@ async function fetchSlots(tourneySlug, streamName) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.STARTGG_API_KEY}`
+        Authorization: `Bearer ${process.env.STARTGG_API_KEY}`,
       },
-      body: JSON.stringify({ query, variables: { tourneySlug } })
+      body: JSON.stringify({ query, variables: { tourneySlug } }),
     });
 
     const json = await response.json();
@@ -270,7 +270,7 @@ async function fetchSlots(tourneySlug, streamName) {
     }
 
     const streams = json.data?.tournament?.streamQueue || [];
-    const stream = streams.find(s => s.stream.streamName === streamName);
+    const stream = streams.find((s) => s.stream.streamName === streamName);
 
     if (!stream) {
       console.warn(`Stream "${streamName}" hittades inte i streamQueue.`);
@@ -284,14 +284,13 @@ async function fetchSlots(tourneySlug, streamName) {
     }
 
     return nextSet.slots;
-
   } catch (err) {
     console.error(err);
     return [];
   }
 }
 
-// Endpoint: hämta en spelares namn
+// Endpoint: hämta en spelares namn + flagga
 app.get("/api/player-name", async (req, res) => {
   const { tourneySlug, streamName, slot } = req.query;
   if (!tourneySlug || !streamName || slot === undefined) {
@@ -300,9 +299,40 @@ app.get("/api/player-name", async (req, res) => {
 
   const slots = await fetchSlots(tourneySlug, streamName);
   const index = parseInt(slot);
-  const name = slots[index]?.entrant?.name ?? `Player ${index + 1}`;
+  const entrant = slots[index]?.entrant;
 
-  res.send(`<div id="p${index + 1}_name">${name}</div>`);
+  if (!entrant) {
+    return res.send(`<div id="p${index + 1}_name">Player ${index + 1}</div>`);
+  }
+
+  // Hantera prefix
+  const displayName = entrant.prefix
+    ? `${entrant.prefix} | ${entrant.name}`
+    : entrant.name;
+
+  // Läs flags.json
+  let flags = {};
+  try {
+    flags = JSON.parse(fs.readFileSync("flags.json", "utf-8"));
+  } catch (e) {}
+
+  // Om spelaren inte finns i flags.json, lägg till
+  if (!flags[displayName]) {
+    flags[displayName] = (
+      entrant.location?.countryCode || "hide"
+    ).toLowerCase();
+    fs.writeFileSync("flags.json", JSON.stringify(flags, null, 2));
+  }
+
+  // Hämta flagg-path
+  const flag = (flags[displayName] || "hide").toLowerCase();
+
+  res.send(`
+    <div id="p${index + 1}_name">
+      <img class="country" src="img/flags/${flag}.png" alt="flag">
+      ${displayName}
+    </div>
+  `);
 });
 
 // Start the server
