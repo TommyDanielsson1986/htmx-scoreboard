@@ -7,7 +7,6 @@
 ## To run the overlay
 Just use `npm run dev`
 To get to dashboard its: `http://localhost:5000/dashboard`
-To get to Top8 its: `http://localhost:5000/dashboard/top8?tournament=&event=&game=` (this is default skin, use game promt and a skin will be offered).
 To get to overlay: `http://localhost:5000/overlays/*Game name*`
 
 ## What game skins do I have?
@@ -16,5 +15,3 @@ To get to overlay: `http://localhost:5000/overlays/*Game name*`
 - Street Fighter 6
 - Tekken 8
 - King Of Fighters 13
-
-This is just V1, V2 will be a lot easier to use.

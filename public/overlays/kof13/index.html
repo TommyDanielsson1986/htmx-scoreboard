@@ -9,12 +9,12 @@
     crossorigin="anonymous"
   ></script>
   <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
-  <link rel="stylesheet" href="../../css/overlay.css" />
+  <link rel="stylesheet" href="../../css/overlay-kof13.css" />
   <title>FGC Overlay</title>
 </head>
 
 <body>
-  <main class="overlay kof-13" id="overlay-theme">
+  <main class="overlay kofxiii" id="overlay-theme">
     <div class="overlay-container">
       <div class="player-left-container" hx-ext="ws" ws-connect="ws://localhost:5000/players-info">
         <div class="player-left-country">
@@ -47,7 +47,7 @@
   </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    /* document.addEventListener("DOMContentLoaded", () => {
       const maxLength = 10;       // antal tecken innan skalning
       const defaultFontSize = 2;  // rem, standardstorlek
       const minFontSize = 1.25;   // rem, minsta storlek
@@ -84,7 +84,7 @@
           subtree: true
         });
       }
-    });
+    }); */
   </script>
 </body>
 </html>

@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,600;1,600&display=swap");
+.overlay.tekken {
+  width: 1920px;
+  height: 1080px;
+  background: transparent url(../img/t8-overlay.png) no-repeat;
+  position: relative;
+  color: #000;
+  text-shadow: #e3e3e3 3px 0 3px;
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.overlay-container {
+  width: 100%;
+}
+
+.overlay-container,
+.player-left-container,
+.player-right-container,
+.rounds-container {
+  display: flex;
+  position: absolute;
+  top: 0;
+  font-size: 2rem;
+}
+
+.player-right-container {
+  top: 10px;
+  right: 180px;
+  width: 500px;
+}
+
+.player-left-container {
+  top: 10px;
+  left: 180px;
+  width: 500px;
+}
+
+.player-left-container,
+.player-right-container {
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+}
+
+.player-left-container .player-left-name,
+.player-right-container .player-right-name {
+  width: 100%;
+  text-align: center;
+  text-shadow: 6px 1px rgb(255, 255, 255);
+}
+.player-left-container .player-left-score,
+.player-right-container .player-right-score,
+.player-left-container .player-left-name {
+  position: absolute;
+}
+
+.player-left-container .player-left-score {
+  right: -15px;
+}
+
+.player-right-container .player-right-score {
+  left: -15px;
+  top: -10px;
+}
+
+.player-left-container .player-left-score,
+.player-right-container .player-right-score {
+  font-size: 3rem;
+  top: 0;
+  text-shadow: 1px 4px 1px rgb(255, 255, 255);
+}
+
+.rounds-container {
+  top: 0px;
+  text-align: center;
+  width: 100%;
+  font-size: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.country {
+  width: 40px;
+  object-fit: cover;
+  height: auto;
+}
+
+.player-right-country,
+.player-right-name {
+  position: absolute;
+}
+
+.player-right-country {
+  right: 0;
+}
+
+.player-right-name,
+.player-left-name {
+  height: 60px;
+  align-content: center;
+  top: 2px;
+}
