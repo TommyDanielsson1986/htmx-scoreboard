@@ -25,6 +25,8 @@
   display: flex;
   position: absolute;
   top: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
 .rounds {
@@ -35,8 +37,24 @@
 }
 
 .player-left .p1-name,
-.player-right .p2-name {
+.player-right .p2-name,
+#p2_container.player-container.player-left .p2-name,
+#p1_container.player-container.player-right .p1-name {
   font-size: 22px;
+}
+
+.p1-name.long,
+.p2-name.long,
+#p1_container.player-container.player-right .p1-name.long,
+#p2_container.player-container.player-left .p2-name.long {
+  font-size: 20px;
+}
+
+.p1-name.very-long,
+.p2-name.very-long,
+#p1_container.player-container.player-right .p1-name.very-long,
+#p2_container.player-container.player-left .p2-name.very-long {
+  font-size: 18px;
 }
 
 .player-left,
@@ -48,16 +66,19 @@
   left: 460px;
 }
 
+.player-left .p1,
+.player-right .p1,
+.player-right .p2,
+.player-left .p2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .player-right {
   right: 460px;
-
-  flex-direction: row-reverse;
 }
 
-.player-left .p1-name,
-.player-right .p2-name {
-  margin-top: 7px;
-}
 .player-left .p1-score,
 .player-right .p2-score,
 .player-left .p2-score,
@@ -66,13 +87,20 @@
   position: absolute;
 }
 
+.player-left .p1-score,
+.player-right .p1-score,
+.player-right .p2-score,
+.player-left .p2-score {
+  top: 0;
+}
+
 .player-left .p1-score {
-    right: -30px;
+  right: -30px;
 }
 
 .player-right .p2-score,
 .player-left .p2-score {
-    left: -28px;
+  left: -28px;
 }
 
 .player-left .p1-name,
@@ -83,3 +111,17 @@
   text-align: center;
 }
 
+/** Swapped **/
+
+#p1_container.player-container.player-right,
+#p2_container.player-container.player-left {
+  flex-direction: row-reverse;
+}
+
+#p1_container.player-container.player-right .p1-score {
+  right: 285px;
+}
+
+#p2_container.player-container.player-left .p2-score {
+  left: 285px;
+}

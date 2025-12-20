@@ -261,8 +261,8 @@ async function fetchSlots(tourneySlug, streamName) {
     const json = await response.json();
 
     // Logga hela streamQueue för debug
-    console.log("=== STREAM QUEUE ===");
-    console.log(JSON.stringify(json.data?.tournament?.streamQueue, null, 2));
+    //console.log("=== STREAM QUEUE ===");
+    //console.log(JSON.stringify(json.data?.tournament?.streamQueue, null, 2));
 
     if (json.errors) {
       console.error(json.errors);
@@ -302,41 +302,48 @@ app.get("/api/player-name", async (req, res) => {
   const entrant = slots[index]?.entrant;
 
   if (!entrant) {
-    return res.send(`<div id="p${index + 1}_name">Player ${index + 1}</div>`);
+    return res.send(`Player ${index + 1}`);
   }
 
-  // Hantera prefix
   const displayName = entrant.prefix
     ? `${entrant.prefix} | ${entrant.name}`
     : entrant.name;
 
-  // Läs flags.json
+  res.send(displayName); // <-- Här skickar vi ENDAST namnet
+});
+
+
+// Endpoint: hämta en spelares flagga
+app.get("/api/player-flag-path", async (req, res) => {
+  const { tourneySlug, streamName, slot } = req.query;
+  if (!tourneySlug || !streamName || slot === undefined) {
+    return res.status(400).send("Missing tourneySlug, streamName or slot");
+  }
+
+  const slots = await fetchSlots(tourneySlug, streamName);
+  const index = parseInt(slot);
+  const entrant = slots[index]?.entrant;
+
+  const displayName = entrant?.prefix
+    ? `${entrant.prefix} | ${entrant.name}`
+    : entrant?.name || `Player ${index + 1}`;
+
   let flags = {};
   try {
     flags = JSON.parse(fs.readFileSync("flags.json", "utf-8"));
   } catch (e) {}
 
-  // Om spelaren inte finns i flags.json, lägg till
   if (!flags[displayName]) {
-    flags[displayName] = (
-      entrant.location?.countryCode || "hide"
-    ).toLowerCase();
+    flags[displayName] = (entrant?.location?.countryCode || "hide").toLowerCase();
     fs.writeFileSync("flags.json", JSON.stringify(flags, null, 2));
   }
 
-  // Hämta flagg-path
-  const flag = (flags[displayName] || "hide").toLowerCase();
+  const flag = flags[displayName] || "hide";
 
-  res.send(`
-    <img id="p${
-      index + 1
-    }_flag" class="country" src="../../img/flags/${flag}.png" alt="flag">
-   
-    <div id="p${index + 1}_name" class="p${index + 1}-name">
-      ${displayName}
-    </div>
-  `);
+  // Skicka bara pathen
+  res.send(`../../img/flags/${flag}.png`);
 });
+
 
 app.ws("/tournament-rounds", (ws, req) => {
   ws.on("message", (msg) => {

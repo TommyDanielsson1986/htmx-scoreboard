@@ -14,14 +14,26 @@
       <div class="overlay-container" id="overlayContainer">
         <!-- Player 1 -->
         <div id="p1_container" class="player-container player-left">
-          <div
-            hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
-            hx-trigger="load, every 10s"
-            hx-swap="outerHTML"
-          >
-            <div id="p1_name">Player 1</div>
-          </div>
+          <!-- Flagga -->
+          <img
+            id="p1_flag"
+            class="country"
+            src="../../img/flags/hide.png"
+            hx-get="/api/player-flag-path?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
+            hx-trigger="load, every 15s"
+            hx-swap="none"
+          />
 
+          <!-- Player 1 name -->
+          <div
+            id="p1_name"
+            class="p1-name"
+            hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
+            hx-trigger="load, every 15s"
+            hx-swap="innerHTML"
+          >
+            Player 1
+          </div>
           <div id="p1_score" class="p1-score">0</div>
         </div>
 
@@ -32,19 +44,64 @@
 
         <!-- Player 2 -->
         <div id="p2_container" class="player-container player-right">
+          <div id="p2_score" class="p2-score">0</div>
           <div
+            id="p2_name"
+            class="p2-name"
             hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=1"
             hx-trigger="load, every 15s"
-            hx-swap="outerHTML"
+            hx-swap="innerHTML"
           >
-            <div id="p2_name">Player 2</div>
+            Player 2
           </div>
-          <div id="p2_score" class="p2-score">0</div>
+          <!-- Flagga -->
+
+          <img
+            id="p2_flag"
+            class="country"
+            src="../../img/flags/hide.png"
+            hx-get="/api/player-flag-path?tourneySlug=demo-for-my-page&streamName=someone&slot=1"
+            hx-trigger="load, every 15s"
+            hx-swap="none"
+          />
         </div>
       </div>
     </main>
 
     <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        adjustNameSize(document.getElementById("p1_name"));
+        adjustNameSize(document.getElementById("p2_name"));
+      });
+
+      document.body.addEventListener("htmx:afterRequest", (e) => {
+        if (e.target.id === "p1_flag" || e.target.id === "p2_flag") {
+          e.target.src = e.detail.xhr.responseText;
+        }
+      });
+      
+      document.body.addEventListener("htmx:afterSwap", (e) => {
+        const el = e.detail.elt;
+        if (el.id === "p1_name" || el.id === "p2_name") {
+          adjustNameSize(el);
+        }
+      });
+
+      function adjustNameSize(el) {
+        if (!el) return;
+
+        const len = el.textContent.trim().length;
+        console.log(el.textContent + " - " + len);
+
+        el.classList.remove("long", "very-long");
+
+        if (len > 12) {
+          el.classList.add("very-long");
+        } else if (len > 8) {
+          el.classList.add("long");
+        }
+      }
+
       const ws = new WebSocket("ws://localhost:5000/score");
 
       const p1 = document.getElementById("p1_container");
