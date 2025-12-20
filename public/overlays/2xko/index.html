@@ -14,22 +14,17 @@
       <div class="overlay-container" id="overlayContainer">
         <!-- Player 1 -->
         <div id="p1_container" class="player-container player-left">
-          <!-- Flagga -->
           <img
             id="p1_flag"
             class="country"
-            hx-get="http://localhost:5000/api/player-flag?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
-            hx-trigger="load, every 10s"
-            hx-swap="outerHTML"
             src="../../img/flags/hide.png"
-            alt="flag"
+            hx-trigger="load, every 15s"
+            hx-swap="none"
           />
-          <!-- Player 1 name -->
           <div
             id="p1_name"
             class="p1-name"
-            hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=0"
-            hx-trigger="load, every 10s"
+            hx-trigger="load, every 15s"
             hx-swap="innerHTML"
           >
             Player 1
@@ -48,32 +43,76 @@
           <div
             id="p2_name"
             class="p2-name"
-            hx-get="http://localhost:5000/api/player-name?tourneySlug=demo-for-my-page&streamName=someone&slot=1"
-            hx-trigger="load, every 10s"
+            hx-trigger="load, every 15s"
             hx-swap="innerHTML"
           >
             Player 2
           </div>
-          <!-- Flagga -->
           <img
             id="p2_flag"
             class="country"
-            hx-get="http://localhost:5000/api/player-flag?tourneySlug=demo-for-my-page&streamName=someone&slot=1"
-            hx-trigger="load, every 10s"
-            hx-swap="outerHTML"
             src="../../img/flags/hide.png"
-            alt="flag"
+            hx-trigger="load, every 15s"
+            hx-swap="none"
           />
         </div>
       </div>
     </main>
 
     <script>
+      // Hämta query-parametrar från URL
+      const params = new URLSearchParams(window.location.search);
+      const tourneySlug = params.get("tourneySlug");
+      const streamName = params.get("streamName");
+
+      // Sätt dynamiskt hx-get för namn och flaggor
+      document
+        .getElementById("p1_name")
+        .setAttribute(
+          "hx-get",
+          `/api/player-name?tourneySlug=${tourneySlug}&streamName=${streamName}&slot=0`
+        );
+      document
+        .getElementById("p2_name")
+        .setAttribute(
+          "hx-get",
+          `/api/player-name?tourneySlug=${tourneySlug}&streamName=${streamName}&slot=1`
+        );
+      document
+        .getElementById("p1_flag")
+        .setAttribute(
+          "hx-get",
+          `/api/player-flag-path?tourneySlug=${tourneySlug}&streamName=${streamName}&slot=0`
+        );
+      document
+        .getElementById("p2_flag")
+        .setAttribute(
+          "hx-get",
+          `/api/player-flag-path?tourneySlug=${tourneySlug}&streamName=${streamName}&slot=1`
+        );
+
+      // Anpassa namnstorlek
+      function adjustNameSize(el) {
+        if (!el) return;
+        const len = el.textContent.trim().length;
+        el.classList.remove("long", "very-long");
+        if (len > 12) el.classList.add("very-long");
+        else if (len > 8) el.classList.add("long");
+      }
+
       document.addEventListener("DOMContentLoaded", () => {
         adjustNameSize(document.getElementById("p1_name"));
         adjustNameSize(document.getElementById("p2_name"));
       });
 
+      // Uppdatera flaggor när hx-get laddar
+      document.body.addEventListener("htmx:afterRequest", (e) => {
+        if (e.target.id === "p1_flag" || e.target.id === "p2_flag") {
+          e.target.src = e.detail.xhr.responseText;
+        }
+      });
+
+      // Justera namn efter htmx-swap
       document.body.addEventListener("htmx:afterSwap", (e) => {
         const el = e.detail.elt;
         if (el.id === "p1_name" || el.id === "p2_name") {
@@ -81,23 +120,8 @@
         }
       });
 
-      function adjustNameSize(el) {
-        if (!el) return;
-
-        const len = el.textContent.trim().length;
-        console.log(el.textContent + " - " + len);
-
-        el.classList.remove("long", "very-long");
-
-        if (len > 12) {
-          el.classList.add("very-long");
-        } else if (len > 8) {
-          el.classList.add("long");
-        }
-      }
-
+      // WebSocket för score + swap + round
       const ws = new WebSocket("ws://localhost:5000/score");
-
       const p1 = document.getElementById("p1_container");
       const p2 = document.getElementById("p2_container");
       const round = document.getElementById("round");
@@ -105,20 +129,12 @@
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
 
-        // SCORE
-        if (typeof data.p1 === "number") {
+        if (typeof data.p1 === "number")
           document.getElementById("p1_score").textContent = data.p1;
-        }
-        if (typeof data.p2 === "number") {
+        if (typeof data.p2 === "number")
           document.getElementById("p2_score").textContent = data.p2;
-        }
+        if (data.round) round.textContent = data.round;
 
-        // ROUND
-        if (data.round) {
-          round.textContent = data.round;
-        }
-
-        // SWAP = KLASSBYTE (INTE DOM-MASSAKER)
         if (typeof data.swap === "boolean") {
           if (data.swap) {
             p1.classList.replace("player-left", "player-right");
