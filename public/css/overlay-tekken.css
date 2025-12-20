@@ -1,0 +1,126 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,600;1,600&display=swap");
+.overlay.tekken {
+  font-family: "Roboto Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  background: url("../img/t8-overlay.png") no-repeat;
+  color: #000;
+}
+
+.overlay-container {
+  overflow: hidden;
+  position: relative;
+  height: 1080px;
+  width: 1920px;
+}
+
+.overlay-container .player-container .country {
+  width: 62px;
+  height: auto;
+  object-fit: cover;
+}
+
+.player-container,
+.rounds-container {
+  display: flex;
+  position: absolute;
+  top: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.rounds {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  font-size: 2rem;
+}
+
+.player-left .p1-name,
+.player-right .p2-name,
+#p2_container.player-container.player-left .p2-name,
+#p1_container.player-container.player-right .p1-name {
+  font-size: 26px;
+}
+
+.p1-name.long,
+.p2-name.long,
+#p1_container.player-container.player-right .p1-name.long,
+#p2_container.player-container.player-left .p2-name.long {
+  font-size: 24px;
+}
+
+.p1-name.very-long,
+.p2-name.very-long,
+#p1_container.player-container.player-right .p1-name.very-long,
+#p2_container.player-container.player-left .p2-name.very-long {
+  font-size: 22px;
+}
+
+.player-left {
+  width: 490px;
+  left: 173px;
+}
+.player-right {
+  width: 490px;
+  right: 178px;
+}
+
+.player-left .p1,
+.player-right .p1,
+.player-right .p2,
+.player-left .p2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-left .p1-score,
+.player-right .p2-score,
+.player-left .p2-score,
+.player-right .p1-score {
+  font-size: 2rem;
+  position: absolute;
+}
+
+.player-left .p1-score,
+.player-right .p1-score,
+.player-right .p2-score,
+.player-left .p2-score {
+  top: 10px;
+  font-size: 35px;
+}
+
+.player-left .p1-score {
+  right: -30px;
+}
+
+.player-right .p2-score,
+.player-left .p2-score {
+  left: -28px;
+}
+
+.player-left .p1-name,
+.player-right .p2-name,
+.player-left .p2-name,
+.player-right .p1-name {
+  width: 215px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+/** Swapped **/
+
+#p1_container.player-container.player-right,
+#p2_container.player-container.player-left {
+  flex-direction: row-reverse;
+}
+
+#p1_container.player-container.player-right .p1-score {
+  right: 540px;
+}
+
+#p2_container.player-container.player-left .p2-score {
+  left: 540px;
+}
