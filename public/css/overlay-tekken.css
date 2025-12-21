@@ -55,17 +55,18 @@
 
 .player-left-container .player-left-score {
   right: -15px;
+  top: 10px;
 }
 
 .player-right-container .player-right-score {
   left: -15px;
-  top: -10px;
+   top: 5px;
 }
 
 .player-left-container .player-left-score,
 .player-right-container .player-right-score {
   font-size: 2.5rem;
-  top: 5px;
+  
 }
 
 .rounds-container {
@@ -92,9 +93,13 @@
   right: 0;
 }
 
+.player-left-name {
+  top: 5px;
+}
+
 .player-right-name,
 .player-left-name {
   height: 60px;
   align-content: center;
-  top: 2px;
+  
 }
