@@ -4,8 +4,6 @@
   height: 1080px;
   background: transparent url(../img/KOF13-overlay.png) no-repeat;
   position: relative;
-  color: #000;
-  text-shadow: #fff 3px 0 3px;
   font-family: "Archivo Black", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -45,8 +43,9 @@
 .player-left-container .player-left-name,
 .player-right-container .player-right-name {
   width: 100%;
+  color: #fff;
   text-align: center;
-  text-shadow: 6px 1px rgb(255, 255, 255);
+  text-shadow: 6px 1px #000;
 }
 .player-left-container .player-left-score,
 .player-right-container .player-right-score,
@@ -66,8 +65,9 @@
 .player-left-container .player-left-score,
 .player-right-container .player-right-score {
   font-size: 3rem;
+  color: #fff;
   top: 0;
-  text-shadow: 1px 4px 1px rgb(255, 255, 255);
+  text-shadow: 1px 4px 1px rgb(0, 0, 0);
 }
 
 .rounds-container {
@@ -77,6 +77,8 @@
   font-size: 2rem;
   align-items: center;
   justify-content: center;
+  color: #000;
+  text-shadow: 3px 8px 3px rgb(138, 138, 138);
 }
 
 .country {

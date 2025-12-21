@@ -1,15 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,600;1,600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Sekuya&display=swap');
 .overlay.tekken {
   width: 1920px;
   height: 1080px;
   background: transparent url(../img/t8-overlay.png) no-repeat;
   position: relative;
-  color: #000;
-  text-shadow: #e3e3e3 3px 0 3px;
-  font-family: "Roboto Condensed", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
+  color: #fff;
+  font-family: "Sekuya", system-ui;
+  font-weight: 400;
   font-style: normal;
+  text-shadow: 6px 1px rgba(165, 42, 42,0.5);
 }
 
 .overlay-container {
@@ -27,13 +26,11 @@
 }
 
 .player-right-container {
-  top: 10px;
   right: 180px;
   width: 500px;
 }
 
 .player-left-container {
-  top: 10px;
   left: 180px;
   width: 500px;
 }
@@ -49,7 +46,6 @@
 .player-right-container .player-right-name {
   width: 100%;
   text-align: center;
-  text-shadow: 6px 1px rgb(255, 255, 255);
 }
 .player-left-container .player-left-score,
 .player-right-container .player-right-score,
@@ -68,9 +64,8 @@
 
 .player-left-container .player-left-score,
 .player-right-container .player-right-score {
-  font-size: 3rem;
-  top: 0;
-  text-shadow: 1px 4px 1px rgb(255, 255, 255);
+  font-size: 2.5rem;
+  top: 5px;
 }
 
 .rounds-container {

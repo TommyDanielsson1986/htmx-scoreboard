@@ -8,12 +8,12 @@
         integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
-    <link rel="stylesheet" href="../../css/overlay-tekken.css">
+    <link rel="stylesheet" href="../../css/overlay-default.css">
     <title>FGC overlay</title>
 </head>
 
 <body>
-    <main class="overlay tekken" id="overlay-theme">
+    <main class="overlay strive" id="overlay-theme">
         <div class="overlay-container" >
             <div class="player-left-container" hx-ext="ws" ws-connect="ws://localhost:5000/players-info">
                 <div class="player-left-country">
@@ -42,47 +42,8 @@
             </div>
         </div>
     </main>
+
     
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const maxLength = 10;       // antal tecken innan skalning
-      const defaultFontSize = 2;  // rem, standardstorlek
-      const minFontSize = 1.25;   // rem, minsta storlek
-
-      const ids = ["p1_name", "p2_name"];
-
-      function adjustFontSize() {
-        ids.forEach((id) => {
-          const el = document.getElementById(id);
-          if (!el) return;
-          const textLength = el.textContent.trim().length;
-
-          let fontSize;
-          if (textLength <= maxLength) {
-            fontSize = defaultFontSize;
-          } else {
-            fontSize = Math.max(minFontSize, defaultFontSize - 0.1 * (textLength - maxLength));
-          }
-
-          el.style.fontSize = fontSize + "rem";
-          console.log(`${id} text length: ${textLength}, font-size: ${fontSize}rem`);
-        });
-      }
-
-      // Kör initialt
-      adjustFontSize();
-
-      // Observera hela container för att fånga alla textändringar via HTMX/WS
-      const container = document.querySelector(".overlay-container");
-      if (container) {
-        const observer = new MutationObserver(adjustFontSize);
-        observer.observe(container, {
-          childList: true,
-          subtree: true
-        });
-      }
-    });
-  </script>
 </body>
 
 </html>
