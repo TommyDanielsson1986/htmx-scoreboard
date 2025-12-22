@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Rampart+One&family=Rubik+Vinyl&display=swap');
+
+.overlay.samsho-2019 {
+  width: 1920px;
+  height: 1080px;
+  background: transparent url(../img/samsho-overlay.png) no-repeat;
+  position: relative;
+}
+
+.overlay-container {
+  width: 100%;
+}
+
+.overlay-container,
+.player-left-container,
+.player-right-container,
+.rounds-container {
+  display: flex;
+  position: absolute;
+  top: 0;
+}
+
+.player-right-container {
+  right: 35px;
+  width: 670px;
+}
+
+.player-left-container {
+  left: 35px;
+  width: 670px;
+}
+
+.player-left-container,
+.player-right-container {
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+}
+
+.player-left-container .player-left-name,
+.player-right-container .player-right-name {
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  text-shadow: 6px 1px #000;
+  font-family: "Rampart One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.player-left-container .player-left-score,
+.player-right-container .player-right-score,
+.player-left-container .player-left-name {
+  position: absolute;
+}
+
+.player-left-container .player-left-score {
+  right: -73px;
+}
+
+.player-right-container .player-right-score {
+  left: -73px;
+}
+
+.player-left-container .player-left-score,
+.player-right-container .player-right-score {
+  font-size: 2.5rem;
+  color: #fff;
+  top: 0px;
+  text-shadow: 1px 4px 1px rgb(0, 0, 0);
+  font-family: "Rubik Vinyl", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.rounds-container {
+  top: 25px;
+  text-align: center;
+  width: 100%;
+  font-size: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+   font-family: "Rampart One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  text-shadow: 0px 3px 0px rgb(0, 0, 0);
+}
+
+.country {
+  width: 40px;
+  object-fit: cover;
+  height: auto;
+}
+
+.player-right-country,
+.player-right-name {
+  position: absolute;
+}
+
+.player-right-country {
+  right: 0;
+}
+
+.player-right-name,
+.player-left-name {
+  height: 60px;
+  align-content: center;
+  top: -10px;
+}
