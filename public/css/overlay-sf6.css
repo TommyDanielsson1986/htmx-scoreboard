@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "citybrawlersboldcaps";
+  src: url("./fonts/citybrawlersboldcaps-webfont.woff2") format("woff2"),
+    url("./fonts/citybrawlersboldcaps-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.overlay.sf {
+  width: 1920px;
+  height: 1080px;
+  background: transparent url(../img/sf6-overlay.png) no-repeat;
+  position: relative;
+  font-family: "citybrawlersboldcaps";
+  color: #fff;
+  text-shadow: #000 3px 0 3px;
+}

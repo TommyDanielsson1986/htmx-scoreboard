@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Anybody:ital,wght@0,100..900;1,100..900&display=swap');
+
+.overlay.kof15 {
+  width: 1920px;
+  height: 1080px;
+  background: transparent url(../img/kof15-overlay.png) no-repeat;
+  position: relative;
+  font-family: "Anybody", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.overlay-container {
+  overflow: hidden;
+  position: relative;
+  height: 1080px;
+  width: 1920px;
+}
+
+.overlay-container .player-container .country {
+  width: 62px;
+  height: auto;
+  object-fit: cover;
+}
+
+.player-container,
+.rounds-container {
+  display: flex;
+  position: absolute;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.rounds {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 1px 3px 3px #000;
+}
+
+.player-left .p1-name,
+.player-right .p2-name,
+#p2_container.player-container.player-left .p2-name,
+#p1_container.player-container.player-right .p1-name {
+  font-size: 26px;
+  top: -5px;
+}
+
+.p1-name.long,
+.p2-name.long,
+#p1_container.player-container.player-right .p1-name.long,
+#p2_container.player-container.player-left .p2-name.long {
+  font-size: 24px;
+  top: -5px;
+}
+
+.p1-name.very-long,
+.p2-name.very-long,
+#p1_container.player-container.player-right .p1-name.very-long,
+#p2_container.player-container.player-left .p2-name.very-long {
+  font-size: 22px;
+  top: -5px;
+}
+
+.player-left {
+  width: 540px;
+
+}
+
+.player-right {
+  width: 542px;
+}
+
+.player-left {
+  left: 273px;
+}
+
+.player-left .p1,
+.player-right .p1,
+.player-right .p2,
+.player-left .p2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-right {
+  right: 275px;
+}
+
+.player-left .p1-score,
+.player-right .p2-score,
+.player-left .p2-score,
+.player-right .p1-score {
+  font-size: 2rem;
+  position: absolute;
+}
+
+.player-left .p1-score,
+.player-right .p1-score,
+.player-right .p2-score,
+.player-left .p2-score {
+  top: 10px;
+  font-size: 35px;
+  color: #fff;
+  text-shadow: 1px 3px 3px #000;
+}
+
+.player-left .p1-score,
+.player-right .p1-score {
+  right: -20px;
+  transform: skew(45deg);
+}
+
+.player-right .p2-score,
+.player-left .p2-score {
+  left: -15px;
+  transform: skew(-45deg);
+}
+
+.player-left .p1-name,
+.player-right .p2-name,
+.player-left .p2-name,
+.player-right .p1-name {
+  width: 100%;
+  min-width: 215px;
+  max-width: 500px;
+  text-align: center;
+  margin: 0 auto;
+  color: #fff;
+  text-shadow: 1px 3px 3px #000;
+  position: relative;
+}
+
+/** Swapped **/
+
+#p1_container.player-container.player-right,
+#p2_container.player-container.player-left {
+  flex-direction: row-reverse;
+}
+
+#p1_container.player-container.player-right .p1-score {
+  right: 540px;
+  transform: skew(-45deg);
+  
+}
+
+#p2_container.player-container.player-left .p2-score {
+  left: 540px;
+  transform: skew(45deg);
+}

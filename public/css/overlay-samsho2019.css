@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Rampart+One&family=Rubik+Vinyl&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap');
 
 .overlay.samsho-2019 {
   width: 1920px;
@@ -7,60 +7,7 @@
   position: relative;
 }
 
-.overlay-container {
-  width: 100%;
-}
 
-.overlay-container,
-.player-left-container,
-.player-right-container,
-.rounds-container {
-  display: flex;
-  position: absolute;
-  top: 0;
-}
-
-.player-right-container {
-  right: 35px;
-  width: 670px;
-}
-
-.player-left-container {
-  left: 35px;
-  width: 670px;
-}
-
-.player-left-container,
-.player-right-container {
-  align-items: center;
-  justify-content: center;
-  height: 60px;
-}
-
-.player-left-container .player-left-name,
-.player-right-container .player-right-name {
-  width: 100%;
-  color: #fff;
-  text-align: center;
-  text-shadow: 6px 1px #000;
-  font-family: "Rampart One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.player-left-container .player-left-score,
-.player-right-container .player-right-score,
-.player-left-container .player-left-name {
-  position: absolute;
-}
-
-.player-left-container .player-left-score {
-  right: -73px;
-}
-
-.player-right-container .player-right-score {
-  left: -73px;
-}
 
 .player-left-container .player-left-score,
 .player-right-container .player-right-score {
@@ -68,43 +15,144 @@
   color: #fff;
   top: 0px;
   text-shadow: 1px 4px 1px rgb(0, 0, 0);
-  font-family: "Rubik Vinyl", system-ui;
+
+}
+
+.overlay-container {
+  overflow: hidden;
+  position: relative;
+  height: 1080px;
+  width: 1920px;
+}
+
+.overlay-container .player-container .country {
+  width: 62px;
+  height: auto;
+  object-fit: cover;
+}
+
+.player-container,
+.rounds-container {
+  display: flex;
+  position: absolute;
+  top: -12px;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 6px 1px #000;
+  font-family: "Rampart One", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
-.rounds-container {
-  top: 25px;
-  text-align: center;
-  width: 100%;
-  font-size: 3.5rem;
+.rounds {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 35px;
+  font-size: 3rem;
+  color: #000;
+  text-shadow: 1px 2px 0px rgb(255, 255, 255);
+}
+
+.player-left .p1-name,
+.player-right .p2-name,
+#p2_container.player-container.player-left .p2-name,
+#p1_container.player-container.player-right .p1-name {
+  font-size: 26px;
+
+}
+
+.p1-name.long,
+.p2-name.long,
+#p1_container.player-container.player-right .p1-name.long,
+#p2_container.player-container.player-left .p2-name.long {
+  font-size: 24px;
+}
+
+.p1-name.very-long,
+.p2-name.very-long,
+#p1_container.player-container.player-right .p1-name.very-long,
+#p2_container.player-container.player-left .p2-name.very-long {
+  font-size: 22px;
+}
+
+.player-left {
+  width: 670px;
+
+}
+
+.player-right {
+  width: 670px;
+}
+
+.player-left {
+  left: 36px;
+}
+.player-right {
+  right: 36px;
+}
+
+.player-left .p1,
+.player-right .p1,
+.player-right .p2,
+.player-left .p2 {
+  display: flex;
   align-items: center;
   justify-content: center;
-  color: #000;
-   font-family: "Rampart One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  text-shadow: 0px 3px 0px rgb(0, 0, 0);
 }
 
-.country {
-  width: 40px;
-  object-fit: cover;
-  height: auto;
-}
 
-.player-right-country,
-.player-right-name {
+.player-left .p1-score,
+.player-right .p2-score,
+.player-left .p2-score,
+.player-right .p1-score {
+  font-size: 2rem;
   position: absolute;
 }
 
-.player-right-country {
-  right: 0;
+.player-left .p1-score,
+.player-right .p1-score,
+.player-right .p2-score,
+.player-left .p2-score {
+  top: 7px;
+  font-size: 35px;
+  color: #fff;
+  text-shadow: 1px 3px 3px #000;
 }
 
-.player-right-name,
-.player-left-name {
-  height: 60px;
-  align-content: center;
-  top: -10px;
+.player-left .p1-score,
+.player-right .p1-score {
+  right: -70px;
+}
+
+.player-right .p2-score,
+.player-left .p2-score {
+  left: -70px;
+}
+
+.player-left .p1-name,
+.player-right .p2-name,
+.player-left .p2-name,
+.player-right .p1-name {
+  width: 100%;
+  min-width: 215px;
+  max-width: 500px;
+  text-align: center;
+  margin: 0 auto;
+  color: #fff;
+  text-shadow: 1px 3px 3px #000;
+}
+
+/** Swapped **/
+
+#p1_container.player-container.player-right,
+#p2_container.player-container.player-left {
+  flex-direction: row-reverse;
+}
+
+#p1_container.player-container.player-right .p1-score {
+  right: 716px;
+}
+
+#p2_container.player-container.player-left .p2-score {
+  left: 716px;
 }

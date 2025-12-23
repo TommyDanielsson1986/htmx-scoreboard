@@ -1,11 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap");
-
-.overlay.twoxko {
-  font-family: "Special Gothic Expanded One", sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Sekuya&display=swap');
+.overlay.strive {
+  width: 1920px;
+  height: 1080px;
+  background: transparent url(../img/strive-overlay.png) no-repeat;
+  position: relative;
+  color: #fff;
+  font-family: "Sekuya", system-ui;
   font-weight: 400;
   font-style: normal;
-  background: url("../img/2xko-overlay.png") no-repeat;
-  color: #fff;
 }
 
 .overlay-container {
@@ -16,7 +18,7 @@
 }
 
 .overlay-container .player-container .country {
-  width: 40px;
+  width: 62px;
   height: auto;
   object-fit: cover;
 }
@@ -25,55 +27,58 @@
 .rounds-container {
   display: flex;
   position: absolute;
-  top: 20px;
   justify-content: center;
   align-items: center;
+}
+
+.player-container {
+  top: 18px;
 }
 
 .rounds {
   left: 50%;
   transform: translateX(-50%);
-  top: 0.3125rem;
-  font-size: 3rem;
+  top: 30px;
+  font-size: 2rem;
+  color: #fff;
+  text-shadow: 1px 3px 3px #000;
 }
 
 .player-left .p1-name,
 .player-right .p2-name,
 #p2_container.player-container.player-left .p2-name,
 #p1_container.player-container.player-right .p1-name {
-  font-size: 22px;
-  top: 5px;
+  font-size: 26px;
 }
 
 .p1-name.long,
 .p2-name.long,
 #p1_container.player-container.player-right .p1-name.long,
 #p2_container.player-container.player-left .p2-name.long {
-  font-size: 20px;
-  top: 10px;
+  font-size: 24px;
 }
 
 .p1-name.very-long,
 .p2-name.very-long,
 #p1_container.player-container.player-right .p1-name.very-long,
 #p2_container.player-container.player-left .p2-name.very-long {
-  font-size: 18px;
-  top: 10px;
-}
-
-.player-left,
-.player-right {
-  width: 280px;
+  font-size: 22px;
 }
 
 .player-left {
-  left: 460px;
+  width: 600px;
 }
 
 .player-right {
-  right: 460px;
+  width: 600px;
 }
 
+.player-left {
+  left: 142px;
+}
+.player-right {
+  right: 142px;
+}
 
 .player-left .p1,
 .player-right .p1,
@@ -91,33 +96,30 @@
 .player-right .p1-score {
   font-size: 2rem;
   position: absolute;
+   text-shadow: 1px 3px 3px #000;
 }
 
 .player-left .p1-score,
-.player-right .p1-score,
-.player-right .p2-score,
-.player-left .p2-score {
-  top: 0;
-}
-
-.player-left .p1-score {
-  right: -30px;
+.player-right .p1-score {
+  right: -20px;
 }
 
 .player-right .p2-score,
 .player-left .p2-score {
-  left: -28px;
+  left: -15px;
 }
 
 .player-left .p1-name,
 .player-right .p2-name,
 .player-left .p2-name,
 .player-right .p1-name {
+  min-width: 252px;
+  max-width: 500px;
   width: 100%;
   text-align: center;
-  min-width: 215px;
-  max-width: 500px;
-  position: relative;
+  margin: 0 auto;
+  color: #fff;
+  text-shadow: 1px 3px 3px #000;
 }
 
 /** Swapped **/
@@ -128,14 +130,11 @@
 }
 
 #p1_container.player-container.player-right .p1-score {
-  right: 285px;
+  left: -15px;
+
 }
 
 #p2_container.player-container.player-left .p2-score {
-  left: 285px;
+  left: 595px;
 }
 
-
-.country {
-  display: none;
-}
