@@ -41,6 +41,7 @@
 
 .player-container,
 .rounds-container {
+  top: 5px;
   display: flex;
   position: absolute;
   justify-content: center;
@@ -61,24 +62,24 @@
 .player-right .p2-name,
 #p2_container.player-container.player-left .p2-name,
 #p1_container.player-container.player-right .p1-name {
-  font-size: 36px;
-  top: 8px;
+  font-size: 3rem;
+  top: 0px;
 }
 
 .p1-name.long,
 .p2-name.long,
 #p1_container.player-container.player-right .p1-name.long,
 #p2_container.player-container.player-left .p2-name.long {
-  font-size: 34px;
-  top: 10px;
+  font-size: 2.5rem;
+  top: 5px;
 }
 
 .p1-name.very-long,
 .p2-name.very-long,
 #p1_container.player-container.player-right .p1-name.very-long,
 #p2_container.player-container.player-left .p2-name.very-long {
-  font-size: 32px;
-  top: 12px;
+  font-size: 2.5rem;
+  top: 5px;
 }
 
 .player-left {

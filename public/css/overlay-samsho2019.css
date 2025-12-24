@@ -73,6 +73,7 @@
 #p1_container.player-container.player-right .p1-name.very-long,
 #p2_container.player-container.player-left .p2-name.very-long {
   font-size: 22px;
+  top: 18px !important;
 }
 
 .player-left {
@@ -140,6 +141,8 @@
   margin: 0 auto;
   color: #fff;
   text-shadow: 1px 3px 3px #000;
+   position: relative;
+  top: 15px;
 }
 
 /** Swapped **/

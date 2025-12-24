@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Sekuya&display=swap');
+
 .overlay.strive {
   width: 1920px;
   height: 1080px;
@@ -63,6 +64,7 @@
 #p1_container.player-container.player-right .p1-name.very-long,
 #p2_container.player-container.player-left .p2-name.very-long {
   font-size: 22px;
+  top: 18px !important;
 }
 
 .player-left {
@@ -76,6 +78,7 @@
 .player-left {
   left: 142px;
 }
+
 .player-right {
   right: 142px;
 }
@@ -96,17 +99,18 @@
 .player-right .p1-score {
   font-size: 2rem;
   position: absolute;
-   text-shadow: 1px 3px 3px #000;
+  text-shadow: 1px 3px 3px #000;
+  top: 10px;
 }
 
 .player-left .p1-score,
 .player-right .p1-score {
-  right: -20px;
+  right: -22px;
 }
 
 .player-right .p2-score,
 .player-left .p2-score {
-  left: -15px;
+  left: -20px;
 }
 
 .player-left .p1-name,
@@ -120,6 +124,8 @@
   margin: 0 auto;
   color: #fff;
   text-shadow: 1px 3px 3px #000;
+  position: relative;
+  top: 15px;
 }
 
 /** Swapped **/
@@ -137,4 +143,3 @@
 #p2_container.player-container.player-left .p2-score {
   left: 595px;
 }
-

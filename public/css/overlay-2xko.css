@@ -42,7 +42,6 @@
 #p2_container.player-container.player-left .p2-name,
 #p1_container.player-container.player-right .p1-name {
   font-size: 22px;
-  top: 5px;
 }
 
 .p1-name.long,
@@ -50,7 +49,6 @@
 #p1_container.player-container.player-right .p1-name.long,
 #p2_container.player-container.player-left .p2-name.long {
   font-size: 20px;
-  top: 10px;
 }
 
 .p1-name.very-long,
@@ -58,7 +56,6 @@
 #p1_container.player-container.player-right .p1-name.very-long,
 #p2_container.player-container.player-left .p2-name.very-long {
   font-size: 18px;
-  top: 10px;
 }
 
 .player-left,
@@ -118,6 +115,7 @@
   min-width: 215px;
   max-width: 500px;
   position: relative;
+  top: 8px;
 }
 
 /** Swapped **/
@@ -134,5 +132,3 @@
 #p2_container.player-container.player-left .p2-score {
   left: 285px;
 }
-
-

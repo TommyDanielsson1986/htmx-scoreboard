@@ -49,7 +49,6 @@
 #p2_container.player-container.player-left .p2-name,
 #p1_container.player-container.player-right .p1-name {
   font-size: 26px;
-  top: -5px;
 }
 
 .p1-name.long,
@@ -57,7 +56,7 @@
 #p1_container.player-container.player-right .p1-name.long,
 #p2_container.player-container.player-left .p2-name.long {
   font-size: 24px;
-  top: -5px;
+  
 }
 
 .p1-name.very-long,
@@ -65,7 +64,6 @@
 #p1_container.player-container.player-right .p1-name.very-long,
 #p2_container.player-container.player-left .p2-name.very-long {
   font-size: 22px;
-  top: -5px;
 }
 
 .player-left {
@@ -136,6 +134,7 @@
   color: #fff;
   text-shadow: 1px 3px 3px #000;
   position: relative;
+  top: 15px;
 }
 
 /** Swapped **/

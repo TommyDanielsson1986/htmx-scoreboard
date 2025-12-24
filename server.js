@@ -306,9 +306,9 @@ app.get("/api/player-name", async (req, res) => {
   }
 
   const displayName = entrant.prefix
-    ? `${entrant.prefix} | ${entrant.name}`
-    : entrant.name;
-
+  ? `${entrant.prefix} | ${entrant.name}`
+  : entrant.name;
+  
   res.send(displayName); // <-- Här skickar vi ENDAST namnet
 });
 
@@ -339,7 +339,6 @@ app.get("/api/player-flag-path", async (req, res) => {
   }
 
   const flag = flags[displayName] || "hide";
-
   // Skicka bara pathen
   res.send(`../../img/flags/${flag}.png`);
 });
