@@ -7,8 +7,7 @@
 ## To run the overlay
 Just use `npm run dev`
 To get to dashboard its: `http://localhost:5000/dashboard`
-To get to Top8 its: `http://localhost:5000/dashboard/top8?tournament=&event=&game=` (this is default skin, use game promt and a skin will be offered).
-To get to overlay: `http://localhost:5000/overlays/*Game name*`
+To get to overlay: `http://localhost:5000/overlays/*Game name*?tourneySlug=&streamName=`
 
 ## What game skins do I have?
 - Guily Gear Strive
@@ -20,10 +19,11 @@ To get to overlay: `http://localhost:5000/overlays/*Game name*`
 - Samurai Shodown 2019
 
 ## No name?
-This time its based on Start.gg instead of manually write them in
+This time its based on Start.gg instead of manually write them in. Now it goes all the way to Grand Final Reset.
 
 ## No Flag?
 This time its based on name via Start.gg, example:
 - If you are regular attentat to certain weekly tournament then once your name has located we will "save" it.
 - Once your name is regeristred in our file we will just add your flag. 
 - If you dont want flag you wont get one (that easy).
+- To mod flag, you need to go to the flags.json file and add the flag name also check the flags folder if your flag is there.
