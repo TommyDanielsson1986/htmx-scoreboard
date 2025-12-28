@@ -3,232 +3,20 @@ import expressWebsocket from "express-ws";
 import fs from "node:fs";
 import fetch from "node-fetch";
 import "dotenv/config";
+
 const app = express();
 expressWebsocket(app);
 
-const rawdataFlags = fs.readFileSync("./flags.json", "utf8");
-let flagsResult = JSON.parse(rawdataFlags);
-
-// Set static folder
+// Static + parsers
 app.use(express.static("public"));
-const connections = [];
-
-// Parse URL-endcoded bodies (as sent by html forms)
 app.use(express.urlencoded({ extended: true }));
-
-// Parse JSON bodies (as sent by API client)
 app.use(express.json());
 
-// Top 8 Bracket route
-app.get("/top8-bracket", async (req, res) => {
-  try {
-    const eventSlug = req.query.event;
-    const tournamentSlug = req.query.tournament;
-    if (!eventSlug) return res.status(400).send("Missing event slug");
 
-    // Full slug
-    const fullSlug = `tournament/${tournamentSlug}/event/${eventSlug}`;
-
-    const query = `
-      query Top8Phase($eventSlug: String!) {
-        event(slug: $eventSlug) {
-          id
-          name
-          phases {
-            id
-            phaseGroups {
-              nodes {
-                id
-                bracketType
-                sets(page:1, perPage:100) {
-                  nodes {
-                    id
-                    fullRoundText
-                    round
-                    winnerId
-                    slots {
-                      standing {
-                        entrant { id name }
-                        stats { score { value } }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    `;
-
-    const gqlRes = await fetch("https://api.start.gg/gql/alpha", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.STARTGG_API_KEY}`,
-      },
-      body: JSON.stringify({ query, variables: { eventSlug: fullSlug } }),
-    });
-
-    const result = await gqlRes.json();
-    if (!result.data?.event) return res.status(404).send("Event not found");
-
-    const event = result.data.event;
-
-    // Samla Top 8 sets
-    const top8Sets = [];
-    const top8Regex =
-      /grand final reset|grand final|winner final|winners semi-final|winners quarter-final|losers final|losers semi-final|losers quarter-final|top 8/i;
-
-    event.phases.forEach((phase) => {
-      phase.phaseGroups.nodes.forEach((pg) => {
-        if (pg.bracketType === "DOUBLE_ELIMINATION") {
-          pg.sets.nodes.forEach((set) => {
-            const text = set.fullRoundText || "";
-            if (top8Regex.test(text)) top8Sets.push(set);
-          });
-        }
-      });
-    });
-
-    // Gruppér i winners/losers
-    const winnersRounds = {};
-    const losersRounds = {};
-
-    top8Sets.forEach((set) => {
-      const key = set.fullRoundText || "";
-      const entrant1 = set.slots[0]?.standing?.entrant || {
-        id: null,
-        name: "",
-      };
-      const entrant2 = set.slots[1]?.standing?.entrant || {
-        id: null,
-        name: "",
-      };
-
-      const entrant1Score = set.slots[0]?.standing?.stats?.score?.value;
-      const entrant2Score = set.slots[1]?.standing?.stats?.score?.value;
-
-      const entrant1ScoreDisplay =
-        entrant1Score === -1 ? "DQ" : entrant1Score ?? "-";
-      const entrant2ScoreDisplay =
-        entrant2Score === -1 ? "DQ" : entrant2Score ?? "-";
-
-      const match = {
-        ...set,
-        entrant1,
-        entrant2,
-        entrant1Score: entrant1ScoreDisplay,
-        entrant2Score: entrant2ScoreDisplay,
-      };
-
-      if (/grand final reset/i.test(key)) {
-        if (!winnersRounds["Grand Final Reset"])
-          winnersRounds["Grand Final Reset"] = [];
-        winnersRounds["Grand Final Reset"].push(match);
-      } else if (/grand final/i.test(key)) {
-        if (!winnersRounds["Grand Final"]) winnersRounds["Grand Final"] = [];
-        winnersRounds["Grand Final"].push(match);
-      } else if (/winner/i.test(key)) {
-        if (!winnersRounds[key]) winnersRounds[key] = [];
-        winnersRounds[key].push(match);
-      } else if (/loser/i.test(key)) {
-        if (!losersRounds[key]) losersRounds[key] = [];
-        losersRounds[key].push(match);
-      }
-    });
-
-    // Standard sorteringslista
-    let roundOrder = [
-      "Winners Quarter-Final",
-      "Winners Semi-Final",
-      "Winner Final",
-      "Grand Final",
-      "Grand Final Reset",
-      "Losers Quarter-Final",
-      "Losers Semi-Final",
-      "Loser Final",
-    ];
-
-    // Dynamiskt lägg till Losers Round 1 om det finns
-    if (losersRounds["Losers Round 1"]) {
-      const index = roundOrder.indexOf("Losers Quarter-Final");
-      if (index !== -1) roundOrder.splice(index, 0, "Losers Round 1");
-    }
-
-    const sortRounds = (rounds) =>
-      Object.keys(rounds).sort((a, b) => {
-        const iA = roundOrder.findIndex(
-          (r) => r.toLowerCase() === a.toLowerCase()
-        );
-        const iB = roundOrder.findIndex(
-          (r) => r.toLowerCase() === b.toLowerCase()
-        );
-        if (iA !== -1 && iB !== -1) return iA - iB;
-        if (iA !== -1) return -1;
-        if (iB !== -1) return 1;
-        return a.localeCompare(b);
-      });
-
-    const renderMatch = (set) => `
-      <div class="match">
-        <div class="player ${
-          set.winnerId === set.entrant1?.id ? "winner" : ""
-        }">
-          <span>${set.entrant1?.name || "TBD"}</span>
-          <span class="score"> ${
-            typeof set.entrant1Score === "number" || set.entrant1Score === "DQ"
-              ? set.entrant1Score
-              : ""
-          }</span>
-        </div>
-        <div class="player ${
-          set.winnerId === set.entrant2?.id ? "winner" : ""
-        }">
-          <span>${set.entrant2?.name || "TBD"}</span>
-          <span class="score"> ${
-            typeof set.entrant2Score === "number" || set.entrant2Score === "DQ"
-              ? set.entrant2Score
-              : ""
-          }</span>
-        </div>
-      </div>
-    `;
-
-    const renderRounds = (rounds) =>
-      sortRounds(rounds)
-        .map(
-          (roundName) => `
-          <div class="round">
-            <h4>${roundName}</h4>
-            ${rounds[roundName].map(renderMatch).join("")}
-          </div>
-        `
-        )
-        .join("");
-
-    // Skapa bracket-layout: winners på toppen, losers på botten
-    res.send(`
-      <div class="bracket-container">
-        <h1>${event.name} – Top 8</h1>
-        <div class="bracket">
-          <div class="column winners">
-            ${renderRounds(winnersRounds)}
-          </div>
-          <div class="column losers">
-            ${renderRounds(losersRounds)}
-          </div>
-        </div>
-      </div>
-    `);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Failed to fetch Top 8");
-  }
-});
-
-// Helper: hämta nästa set på en specifik stream
-async function fetchSlots(tourneySlug, streamName) {
+// ==========================
+// Helper: hämta nästa set i streamQueue
+// ==========================
+async function fetchNextSet(tourneySlug, streamName) {
   const query = `
     query StreamQueueOnTournament($tourneySlug: String!) {
       tournament(slug: $tourneySlug) {
@@ -240,7 +28,14 @@ async function fetchSlots(tourneySlug, streamName) {
             id
             fullRoundText
             slots {
-              entrant { name }
+              entrant {
+                id
+                name
+                #prefix
+                #location {
+                  #countryCode
+                #}
+              }
             }
           }
         }
@@ -249,7 +44,7 @@ async function fetchSlots(tourneySlug, streamName) {
   `;
 
   try {
-    const response = await fetch("https://api.start.gg/gql/alpha", {
+    const res = await fetch("https://api.start.gg/gql/alpha", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -258,71 +53,80 @@ async function fetchSlots(tourneySlug, streamName) {
       body: JSON.stringify({ query, variables: { tourneySlug } }),
     });
 
-    const json = await response.json();
-
-    // Logga hela streamQueue för debug
-    //console.log("=== STREAM QUEUE ===");
-    //console.log(JSON.stringify(json.data?.tournament?.streamQueue, null, 2));
+    const json = await res.json();
+    //console.log("=== START.GG RESPONSE ===");
+    //console.log(JSON.stringify(json, null, 2)); // 🔹 debug hela response
 
     if (json.errors) {
-      console.error(json.errors);
-      return [];
+      console.error("GraphQL errors:", json.errors);
+      return null;
     }
 
     const streams = json.data?.tournament?.streamQueue || [];
-    const stream = streams.find((s) => s.stream.streamName === streamName);
+    //console.log("Streams:", streams.map(s => s.stream.streamName));
 
+    const stream = streams.find(s => s.stream.streamName === streamName);
     if (!stream) {
-      console.warn(`Stream "${streamName}" hittades inte i streamQueue.`);
-      return [];
+      console.warn(`Stream '${streamName}' hittades inte`);
+      return null;
     }
 
-    const nextSet = stream.sets[0]; // första set i queue
-    if (!nextSet) {
-      console.warn(`Ingen set i queue för stream "${streamName}"`);
-      return [];
+    console.log(`Found stream: ${stream.stream.streamName}`);
+    console.log("Sets:", stream.sets);
+
+    if (!stream.sets.length) {
+      console.warn(`Stream '${streamName}' har inga set`);
+      return null;
     }
 
-    return nextSet.slots;
+    return stream.sets[0]; // nästa set på streamen
   } catch (err) {
-    console.error(err);
-    return [];
+    console.error("fetchNextSet ERROR:", err);
+    return null;
   }
 }
 
-// Endpoint: hämta en spelares namn + flagga
+// ==========================
+// Endpoint: Spelarnamn (+ prefix, ev W/L)
+// ==========================
 app.get("/api/player-name", async (req, res) => {
   const { tourneySlug, streamName, slot } = req.query;
   if (!tourneySlug || !streamName || slot === undefined) {
-    return res.status(400).send("Missing tourneySlug, streamName or slot");
+    return res.status(400).send("Missing params");
   }
 
-  const slots = await fetchSlots(tourneySlug, streamName);
+  const set = await fetchNextSet(tourneySlug, streamName);
+  if (!set) return res.send(`Player ${Number(slot) + 1}`);
+
   const index = parseInt(slot);
-  const entrant = slots[index]?.entrant;
-
-  if (!entrant) {
-    return res.send(`Player ${index + 1}`);
-  }
+  const entrant = set.slots[index]?.entrant;
+  if (!entrant) return res.send(`Player ${index + 1}`);
 
   const displayName = entrant.prefix
-  ? `${entrant.prefix} | ${entrant.name}`
-  : entrant.name;
-  
-  res.send(displayName); // <-- Här skickar vi ENDAST namnet
+    ? `${entrant.prefix} | ${entrant.name}`
+    : entrant.name;
+
+  // Grand Final → W/L
+  let role = "";
+  if (/grand final/i.test(set.fullRoundText || "")) {
+    role = index === 0 ? "W" : "L";
+  }
+
+  res.send(role ? `${displayName} [${role}]` : displayName);
 });
 
-
-// Endpoint: hämta en spelares flagga
+// ==========================
+// Endpoint: Flagga (från flags.json, uppdateras dynamiskt)
+// ==========================
 app.get("/api/player-flag-path", async (req, res) => {
   const { tourneySlug, streamName, slot } = req.query;
   if (!tourneySlug || !streamName || slot === undefined) {
-    return res.status(400).send("Missing tourneySlug, streamName or slot");
+    return res.status(400).send("Missing params");
   }
 
-  const slots = await fetchSlots(tourneySlug, streamName);
+  const set = await fetchNextSet(tourneySlug, streamName);
   const index = parseInt(slot);
-  const entrant = slots[index]?.entrant;
+  const entrant = set?.slots[index]?.entrant;
 
   const displayName = entrant?.prefix
     ? `${entrant.prefix} | ${entrant.name}`
@@ -330,65 +134,57 @@ app.get("/api/player-flag-path", async (req, res) => {
 
   let flags = {};
   try {
-    flags = JSON.parse(fs.readFileSync("flags.json", "utf-8"));
-  } catch (e) {}
+    flags = JSON.parse(fs.readFileSync("flags.json", "utf8"));
+  } catch {}
 
   if (!flags[displayName]) {
-    flags[displayName] = (entrant?.location?.countryCode || "hide").toLowerCase();
+    flags[displayName] = (
+      entrant?.location?.countryCode || "hide"
+    ).toLowerCase();
+
     fs.writeFileSync("flags.json", JSON.stringify(flags, null, 2));
   }
 
   const flag = flags[displayName] || "hide";
-  // Skicka bara pathen
   res.send(`../../img/flags/${flag}.png`);
 });
 
-
-app.ws("/tournament-rounds", (ws, req) => {
-  ws.on("message", (msg) => {
-    // Skicka round-text
-    ws.send(JSON.stringify({ round: msg }));
-  });
-});
-
+// ==========================
+// SCORE + ROUND (ORÖRT)
+// ==========================
 const scoreConnections = [];
 let currentScore = { p1: 0, p2: 0, swap: false };
 
-// Score WS
-// WebSocket för score + swap + round
-app.ws("/score", (ws, req) => {
+app.ws("/score", (ws) => {
   scoreConnections.push(ws);
-
-  // Skicka nuvarande state direkt till ny klient
   ws.send(JSON.stringify(currentScore));
 
   ws.on("message", (msg) => {
     const data = JSON.parse(msg);
 
-    // Score
     if (data["player-one-score"] !== undefined)
       currentScore.p1 = parseInt(data["player-one-score"]);
     if (data["player-two-score"] !== undefined)
       currentScore.p2 = parseInt(data["player-two-score"]);
 
-    // Swap: växla varje gång dashboard skickar swap
     if (data.swap) currentScore.swap = !currentScore.swap;
-
-    // Round: uppdatera round-text
     if (data.round !== undefined) currentScore.round = data.round;
 
-    // Skicka uppdatering till alla klienter
-    scoreConnections.forEach((conn) => {
-      if (conn.readyState === 1) conn.send(JSON.stringify(currentScore));
+    scoreConnections.forEach((c) => {
+      if (c.readyState === 1)
+        c.send(JSON.stringify(currentScore));
     });
   });
 
   ws.on("close", () => {
-    const index = scoreConnections.indexOf(ws);
-    if (index > -1) scoreConnections.splice(index, 1);
+    const i = scoreConnections.indexOf(ws);
+    if (i !== -1) scoreConnections.splice(i, 1);
   });
 });
-// Start the server
+
+// ==========================
+// Start server
+// ==========================
 app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server listning on port ${process.env.PORT || 3000}`);
+  console.log(`Server listening on ${process.env.PORT || 3000}`);
 });

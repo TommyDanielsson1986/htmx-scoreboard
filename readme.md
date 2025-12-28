@@ -12,10 +12,12 @@ To get to overlay: `http://localhost:5000/overlays/*Game name*`
 
 ## What game skins do I have?
 - Guily Gear Strive
-- 2xko
+- Riot´s 2xKO
 - Street Fighter 6
 - Tekken 8
+- King Of fighters 15
 - King Of Fighters 13
+- Samurai Shodown 2019
 
 ## No name?
 This time its based on Start.gg instead of manually write them in
