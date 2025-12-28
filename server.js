@@ -12,7 +12,6 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
 // ==========================
 // Helper: hämta nästa set i streamQueue
 // ==========================
@@ -65,7 +64,7 @@ async function fetchNextSet(tourneySlug, streamName) {
     const streams = json.data?.tournament?.streamQueue || [];
     //console.log("Streams:", streams.map(s => s.stream.streamName));
 
-    const stream = streams.find(s => s.stream.streamName === streamName);
+    const stream = streams.find((s) => s.stream.streamName === streamName);
     if (!stream) {
       console.warn(`Stream '${streamName}' hittades inte`);
       return null;
@@ -99,20 +98,26 @@ app.get("/api/player-name", async (req, res) => {
   if (!set) return res.send(`Player ${Number(slot) + 1}`);
 
   const index = parseInt(slot);
-  const entrant = set.slots[index]?.entrant;
+
+  // Hitta Grand Final Reset set om det finns
+  const streamQueue = await fetchNextSet(tourneySlug, streamName, true); // true = ta Grand Final Reset om den finns
+  const gfResetSet = streamQueue?.sets?.find((s) =>
+    /grand final reset/i.test(s.fullRoundText)
+  );
+  const usedSet = gfResetSet || set;
+
+  const entrant = usedSet.slots[index]?.entrant;
   if (!entrant) return res.send(`Player ${index + 1}`);
 
-  const displayName = entrant.prefix
-    ? `${entrant.prefix} | ${entrant.name}`
-    : entrant.name;
+  const displayName = entrant.name;
 
-  // Grand Final → W/L
+  // W/L för Grand Final eller Grand Final Reset
   let role = "";
-  if (/grand final/i.test(set.fullRoundText || "")) {
+  if (/grand final/i.test(usedSet.fullRoundText || "")) {
     role = index === 0 ? "W" : "L";
   }
 
-  res.send(role ? `${displayName} [${role}]` : displayName);
+  res.send(role ? ` ${displayName} [${role}]` : displayName);
 });
 
 // ==========================
@@ -171,8 +176,7 @@ app.ws("/score", (ws) => {
     if (data.round !== undefined) currentScore.round = data.round;
 
     scoreConnections.forEach((c) => {
-      if (c.readyState === 1)
-        c.send(JSON.stringify(currentScore));
+      if (c.readyState === 1) c.send(JSON.stringify(currentScore));
     });
   });
 
