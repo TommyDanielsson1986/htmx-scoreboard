@@ -144,13 +144,13 @@ app.get("/api/player-flag-path", async (req, res) => {
 
   if (!flags[displayName]) {
     flags[displayName] = (
-      entrant?.location?.countryCode || "hide"
+      entrant?.location?.countryCode || "pirate"
     ).toLowerCase();
 
     fs.writeFileSync("flags.json", JSON.stringify(flags, null, 2));
   }
 
-  const flag = flags[displayName] || "hide";
+  const flag = flags[displayName] || "pirate";
   res.send(`../../img/flags/${flag}.png`);
 });
 
