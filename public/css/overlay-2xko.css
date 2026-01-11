@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=BBH+Bartle&display=swap");
 .overlay.twoxko {
-  width: 1920px;
-  height: 1080px;
+  width: 2560px;
+  height: 1440px;
   background: transparent url(../img/2xko-overlay.png) no-repeat;
   position: relative;
   font-family: "BBH Bartle", sans-serif;
