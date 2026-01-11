@@ -1,5 +1,4 @@
 node_modules
-top8-token.txt
 package-lock.json
 .env.*
 flags.json

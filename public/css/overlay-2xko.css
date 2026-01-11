@@ -5,20 +5,21 @@
   font-weight: 400;
   font-style: normal;
   background: url("../img/2xko-overlay.png") no-repeat;
-  color: #fff;
+  color: #000;
 }
 
 .overlay-container {
   overflow: hidden;
   position: relative;
-  height: 1080px;
-  width: 1920px;
+  height: 1440px;
+  width: 2560px;
 }
 
 .overlay-container .player-container .country {
   width: 40px;
   height: auto;
   object-fit: cover;
+  position: absolute;
 }
 
 .player-container,
@@ -33,8 +34,9 @@
 .rounds {
   left: 50%;
   transform: translateX(-50%);
-  top: 0.3125rem;
-  font-size: 3rem;
+  top: 14px;
+  font-size: 2rem;
+  color: #fff;
 }
 
 .player-left .p1-name,
@@ -55,22 +57,18 @@
 .p2-name.very-long,
 #p1_container.player-container.player-right .p1-name.very-long,
 #p2_container.player-container.player-left .p2-name.very-long {
-  font-size: 18px;
-}
-
-.player-left,
-.player-right {
-  width: 280px;
+  font-size: 20px;
 }
 
 .player-left {
-  left: 460px;
+  left: 600px;
+  width: 470px;
 }
 
 .player-right {
-  right: 460px;
+  right: 600px;
+  width: 470px;
 }
-
 
 .player-left .p1,
 .player-right .p1,
@@ -81,41 +79,53 @@
   justify-content: center;
 }
 
-
 .player-left .p1-score,
 .player-right .p2-score,
 .player-left .p2-score,
 .player-right .p1-score {
   font-size: 2rem;
   position: absolute;
+  color: #fff;
 }
 
 .player-left .p1-score,
-.player-right .p1-score,
-.player-right .p2-score,
-.player-left .p2-score {
-  top: 0;
+.player-right .p2-score {
+  top: -6px;
+  width: 30px;
+  text-align: center;
 }
 
 .player-left .p1-score {
-  right: -30px;
+  left: 21px;
 }
-
-.player-right .p2-score,
-.player-left .p2-score {
-  left: -28px;
+.player-right .p2-score {
+  right: 22px;
 }
 
 .player-left .p1-name,
-.player-right .p2-name,
-.player-left .p2-name,
-.player-right .p1-name {
-  width: 100%;
+.player-right .p2-name {
+  position: absolute;
+  width: 350px;
   text-align: center;
-  min-width: 215px;
-  max-width: 500px;
-  position: relative;
-  top: 8px;
+}
+
+.player-left .p1-name,
+.player-right .p2-name {
+  top: calc(22px - 20px);
+}
+
+.player-left .p1-name {
+  left: 60px;
+}
+
+.player-left .country {
+  top: -5px;
+  left: 423px;
+}
+
+.player-right .country {
+  top: -5px;
+  right: 421px;
 }
 
 /** Swapped **/
@@ -126,9 +136,11 @@
 }
 
 #p1_container.player-container.player-right .p1-score {
-  right: 285px;
+  right: 26px;
+  top: -5px;
 }
 
 #p2_container.player-container.player-left .p2-score {
-  left: 285px;
+  left: 22px;
+  top: -5px;
 }
